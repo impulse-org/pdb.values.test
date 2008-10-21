@@ -38,6 +38,7 @@ public class AllTests {
 		suite.addTestSuite(TestRelation.class);
 		suite.addTestSuite(TestList.class);
 		suite.addTestSuite(TestValueFactory.class);
+		suite.addTestSuite(TestIO.class);
 		
 		return suite;
 	}
