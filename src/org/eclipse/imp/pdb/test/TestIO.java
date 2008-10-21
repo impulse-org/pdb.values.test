@@ -43,27 +43,39 @@ public class TestIO extends TestCase {
 	private static TreeNodeType NameNode  = tf.treeType(Name, "name", tf.stringType());
 	private static TreeNodeType Friends = tf.treeType(Boolean, "friends", tf.listType(Name));
 	private static TreeNodeType Couples = tf.treeType(Boolean, "couples", tf.listType(tf.tupleTypeOf(Name, Name)));
+	
+	private IValue[] testValues = {
+			vf.tree(True),
+			vf.tree(And, vf.tree(True), vf.tree(False)),
+			vf.tree(Not, vf.tree(And, vf.tree(True), vf.tree(False))),
+			vf.tree(TwoTups, vf.tuple(vf.tree(True), vf.tree(False)),vf.tuple(vf.tree(True), vf.tree(False))),
+			vf.tree(Or, vf.listWith(vf.tree(True), vf.tree(False), vf.tree(True))),
+			vf.tree(Friends, vf.listWith(name("Hans"), name("Bob"))),
+			vf.tree(Or, vf.list(Boolean)),
+			vf.tree(Couples, vf.listWith(vf.tuple(name("A"), name("B")), vf.tuple(name("C"), name("D"))))
+	};
+	
+	private String[] testXML = {
+		"<true/>",
+		"<and><true/><false/></and>",
+	    "<not><and><true/><false/></and></not>",
+	    "<twotups><true/><false/><true/><false/></twotups>",
+	    "<or><true/><false/><true/></or>",
+	    "<friends><name>Hans</name><name>Bob</name></friends>",
+	    "<or/>",
+	    "<couples><name>A</name><name>B</name><name>C</name><name>D</name></couples>"
+	    };
 
 	public void testXMLWriter() {
 		XMLWriter testWriter = new XMLWriter();
 		
-		IValue[] tests = {
-				vf.tree(True),
-				vf.tree(False),
-				vf.tree(And, vf.tree(True), vf.tree(False)),
-				vf.tree(Not, vf.tree(And, vf.tree(True), vf.tree(False))),
-				vf.tree(Or, vf.listWith(vf.tree(True), vf.tree(False), vf.tree(True))),
-				vf.tree(Friends, vf.listWith(name("Bob"), name("Hans"))),
-				vf.tree(Or, vf.list(Boolean)),
-				vf.tree(Couples, vf.listWith(vf.tuple(name("A"), name("B")), vf.tuple(name("C")), name("D")))
-		};
-		
-		for (IValue test : tests) {
+		for (IValue test : testValues) {
 			try {
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				testWriter.write(test, stream);
 				System.err.println(test + " -> " + stream.toString());
 			} catch (IOException e) {
+				e.printStackTrace();
 				fail(e.getMessage());
 			}
 		}
@@ -75,21 +87,15 @@ public class TestIO extends TestCase {
 	
 	public void testXMLReader() {
 		XMLReader testReader = new XMLReader();
-		String[] tests = {
-			"<true/>",
-			"<and><true/><false/></and>",
-		    "<not><and><true/><false/></and></not>",
-		    "<twotups><true/><false/><true/><false/></twotups>",
-	        "<or><true/><false/><true/></or>",
-	        "<friends><name>Hans</name><name>Bob</name></friends>",
-	        "<or/>",
-	        "<couples><name>A</name><name>B</name><name>C</name><name>D</name></couples>"
-	        };
 		
 		try {
-			for (String test : tests) {
-				IValue result = testReader.read(vf, Boolean, new ByteArrayInputStream(test.getBytes()));
-				System.err.println(test + " -> " + result);
+			for (int i = 0; i < testXML.length; i++) {
+				IValue result = testReader.read(vf, Boolean, new ByteArrayInputStream(testXML[i].getBytes()));
+				System.err.println(testXML[i] + " -> " + result);
+				
+				if (!result.equals(testValues[i])) {
+					fail(testXML[i] + " did not parse correctly: " + result + " != " + testValues[i]);
+				}
 			}
 		} catch (FactTypeError e) {
 			fail();
