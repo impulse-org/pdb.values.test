@@ -68,19 +68,30 @@ public class TestIO extends TestCase {
 
 	public void testXMLWriter() {
 		XMLWriter testWriter = new XMLWriter();
-		
+		int i = 0;
 		for (IValue test : testValues) {
 			try {
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				testWriter.write(test, stream);
 				System.err.println(test + " -> " + stream.toString());
+				
+				if (strip(stream.toString()).equals(testXML[i])) {
+					fail(stream.toString() + " != " + testXML[i]);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				fail(e.getMessage());
 			}
 		}
+		i++;
 	}
 	
+	private String strip(String string) {
+		string = string.substring(string.lastIndexOf("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"));
+		string = string.replaceAll(" ", "");
+		return string;
+	}
+
 	private static IValue name(String n) {
 		return vf.tree(NameNode, vf.string(n));
 	}
