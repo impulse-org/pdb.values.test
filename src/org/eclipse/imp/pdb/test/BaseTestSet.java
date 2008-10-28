@@ -14,6 +14,8 @@ package org.eclipse.imp.pdb.test;
 
 import java.util.Iterator;
 
+import junit.framework.TestCase;
+
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
@@ -22,8 +24,6 @@ import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
-
-import junit.framework.TestCase;
 
 public abstract class BaseTestSet extends TestCase {
 	private IValueFactory vf;
@@ -127,7 +127,7 @@ public abstract class BaseTestSet extends TestCase {
 			// this should happen
 		}
 		
-		ISet numberSet = vf.set(tf.numberType());
+		ISet numberSet = vf.set(tf.valueType());
 		
 		try {
 			numberSet.getWriter().insert(integers[0]);
@@ -210,7 +210,7 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.doubleType());
 		
 		try {
-			if (dSet.intersect(set1).getElementType() != tf.numberType()) {
+			if (dSet.intersect(set1).getElementType() != tf.valueType()) {
 				fail("intersect should produce lub types");
 			}
 		} catch (FactTypeError e) {
@@ -324,7 +324,7 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.doubleType());
 		
 		try {
-			if (dSet.subtract(set1).getElementType() != tf.numberType()) {
+			if (dSet.subtract(set1).getElementType() != tf.valueType()) {
 				fail("subtract should produce lub types");
 			}
 		} catch (FactTypeError e) {
@@ -388,7 +388,7 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.doubleType());
 		
 		try {
-			if (dSet.union(set1).getElementType() != tf.numberType()) {
+			if (dSet.union(set1).getElementType() != tf.valueType()) {
 				fail("union should produce lub types");
 			}
 		} catch (FactTypeError e) {

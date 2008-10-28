@@ -104,12 +104,6 @@ public class TestTypeFactory extends TestCase {
 		}
 	}
 
-	public void testNumberType() {
-		if (ft.numberType() != ft.numberType()) {
-			fail("numberType should be canonical");
-		}
-	}
-
 	public void testStringType() {
 		if (ft.stringType() != ft.stringType()) {
 			fail("stringType should be canonical");

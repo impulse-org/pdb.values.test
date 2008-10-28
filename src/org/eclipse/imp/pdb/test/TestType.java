@@ -22,7 +22,6 @@ import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.IntegerType;
 import org.eclipse.imp.pdb.facts.type.ListType;
 import org.eclipse.imp.pdb.facts.type.NamedType;
-import org.eclipse.imp.pdb.facts.type.NumberType;
 import org.eclipse.imp.pdb.facts.type.RelationType;
 import org.eclipse.imp.pdb.facts.type.SetType;
 import org.eclipse.imp.pdb.facts.type.SourceLocationType;
@@ -51,7 +50,6 @@ public class TestType extends TestCase {
 			basic.add(ft.objectType(Integer.class));
 
 			allTypes.add(ft.valueType());
-			allTypes.add(ft.numberType());
 			allTypes.addAll(basic);
 
 			for (int i = 0; i < 2; i++) {
@@ -283,21 +281,6 @@ public class TestType extends TestCase {
 			if (t instanceof IntegerType) {
 				if (!(t.isIntegerType())) {
 					fail("integer type should class IntegerType");
-				}
-			}
-		}
-	}
-
-	public void testIsNumberType() {
-		for (Type t : allTypes) {
-			if (t.isNumberType()) {
-				if (!(t instanceof NumberType)) {
-					fail("number type should class NumberType");
-				}
-			}
-			if (t instanceof NumberType) {
-				if (!t.isNumberType()) {
-					fail("number type should class NumberType");
 				}
 			}
 		}

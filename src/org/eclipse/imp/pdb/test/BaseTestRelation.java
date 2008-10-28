@@ -165,7 +165,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		
 		try {
-			IRelation rel = vf.relation(tf.tupleTypeOf(tf.integerType(), tf.numberType()));
+			IRelation rel = vf.relation(tf.tupleTypeOf(tf.integerType(), tf.integerType()));
 			rel.closure();
 		}
 		catch (FactTypeError e) {
@@ -753,7 +753,7 @@ public abstract class BaseTestRelation extends TestCase {
 			
 			ISet carrier1 = rel1.carrier();
 			
-			if (carrier1.getElementType() != tf.numberType()) {
+			if (carrier1.getElementType() != tf.integerType()) {
 				fail("expected number type on carrier");
 			}
 			
