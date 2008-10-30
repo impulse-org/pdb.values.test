@@ -31,9 +31,9 @@ public abstract class BaseTestTree extends TestCase {
     TupleType BoolOp = tf.tupleTypeOf(Boolean);
     TreeNodeType True = tf.treeType(Boolean, "true");
     TreeNodeType False = tf.treeType(Boolean, "false");
-    TreeNodeType And = tf.treeType(Boolean, "and", BoolBinOp);
-    TreeNodeType Or = tf.treeType(Boolean, "and", BoolBinOp);
-    TreeNodeType Not = tf.treeType(Boolean, "not", BoolOp);
+    TreeNodeType And = tf.treeNodeType(Boolean, "and", BoolBinOp);
+    TreeNodeType Or = tf.treeNodeType(Boolean, "and", BoolBinOp);
+    TreeNodeType Not = tf.treeNodeType(Boolean, "not", BoolOp);
     
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();
