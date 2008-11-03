@@ -14,14 +14,14 @@ package org.eclipse.imp.pdb.test;
 
 import java.util.Iterator;
 
+import junit.framework.TestCase;
+
 import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IListWriter;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
-
-import junit.framework.TestCase;
 
 public abstract class BaseTestList extends TestCase {
     private IValueFactory vf;
@@ -53,8 +53,7 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			IList namedList = vf.list(tf.namedType("myList", tf.listType(tf.integerType())));
-			
+			IList namedList = (IList) tf.namedType("myList", tf.listType(tf.integerType())).make(vf);
 			if (namedList.getElementType() != tf.integerType()) {
 				fail("named list has wrong elementtype");
 			}

@@ -138,7 +138,7 @@ public abstract class BaseTestSet extends TestCase {
 	}
 
 	public void testContains() {
-		ISet set1 = vf.setWith(integers[0], integers[1]);
+		ISet set1 = vf.set(integers[0], integers[1]);
 		
 		try {
 			set1.contains(doubles[0]);
@@ -157,9 +157,9 @@ public abstract class BaseTestSet extends TestCase {
 	public void testIntersect() {
 		ISet set1 = vf.set(tf.integerType());
 		ISet set2 = vf.set(tf.integerType());
-		ISet set3 = vf.setWith(integers[0], integers[1], integers[2]);
-		ISet set4 = vf.setWith(integers[2], integers[3], integers[4]);
-		ISet set5 = vf.setWith(integers[3], integers[4], integers[5]);
+		ISet set3 = vf.set(integers[0], integers[1], integers[2]);
+		ISet set4 = vf.set(integers[2], integers[3], integers[4]);
+		ISet set5 = vf.set(integers[3], integers[4], integers[5]);
 		
 		try {
 			if (!set1.intersect(set2).isEmpty()) {
@@ -219,7 +219,7 @@ public abstract class BaseTestSet extends TestCase {
 	}
 
 	public void testInvert() {
-		ISet set1 = vf.setWith(integers[0], integers[1], integers[2]);
+		ISet set1 = vf.set(integers[0], integers[1], integers[2]);
 		
 		try {
 			if (set1.invert(integerUniverse).size() != integerUniverse.size() - set1.size()) {
@@ -259,7 +259,7 @@ public abstract class BaseTestSet extends TestCase {
 			fail("empty sets have size 0");
 		}
 		
-		if (vf.setWith(integers[0]).size() != 1) {
+		if (vf.set(integers[0]).size() != 1) {
 			fail("singleton set should have size 1");
 		}
 		
@@ -271,9 +271,9 @@ public abstract class BaseTestSet extends TestCase {
 	public void testSubtract() {
 		ISet set1 = vf.set(tf.integerType());
 		ISet set2 = vf.set(tf.integerType());
-		ISet set3 = vf.setWith(integers[0], integers[1], integers[2]);
-		ISet set4 = vf.setWith(integers[2], integers[3], integers[4]);
-		ISet set5 = vf.setWith(integers[3], integers[4], integers[5]);
+		ISet set3 = vf.set(integers[0], integers[1], integers[2]);
+		ISet set4 = vf.set(integers[2], integers[3], integers[4]);
+		ISet set5 = vf.set(integers[3], integers[4], integers[5]);
 		
 		try {
 			if (!set1.subtract(set2).isEmpty()) {
@@ -335,9 +335,9 @@ public abstract class BaseTestSet extends TestCase {
 	public void testUnion() {
 		ISet set1 = vf.set(tf.integerType());
 		ISet set2 = vf.set(tf.integerType());
-		ISet set3 = vf.setWith(integers[0], integers[1], integers[2]);
-		ISet set4 = vf.setWith(integers[2], integers[3], integers[4]);
-		ISet set5 = vf.setWith(integers[3], integers[4], integers[5]);
+		ISet set3 = vf.set(integers[0], integers[1], integers[2]);
+		ISet set4 = vf.set(integers[2], integers[3], integers[4]);
+		ISet set5 = vf.set(integers[3], integers[4], integers[5]);
 		
 		try {
 			if (!set1.union(set2).isEmpty()) {
@@ -421,7 +421,7 @@ public abstract class BaseTestSet extends TestCase {
 			// this should happen
 		} 
 		
-		ISet set = vf.setWith(vf.tuple(integers[0], doubles[0]));
+		ISet set = vf.set(vf.tuple(integers[0], doubles[0]));
 		
 		try {
 			IRelation rel = set.toRelation();
@@ -457,7 +457,7 @@ public abstract class BaseTestSet extends TestCase {
 	}
 
 	public void testProductISet() {
-		ISet test = vf.setWith(integers[0], integers[1], integers[2],integers[3]);
+		ISet test = vf.set(integers[0], integers[1], integers[2],integers[3]);
 		IRelation prod = test.product(test);
 		
 		if (prod.arity() != 2) {
@@ -478,7 +478,7 @@ public abstract class BaseTestSet extends TestCase {
 	}
 	
 	public void testProductIRelation() {
-		ISet test = vf.setWith(integers[0], integers[1], integers[2],integers[3]);
+		ISet test = vf.set(integers[0], integers[1], integers[2],integers[3]);
 		IRelation prod = test.product(test);
 		IRelation prod2 = test.product(prod);
 		

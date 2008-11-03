@@ -33,7 +33,7 @@ public class TestTypeFactory extends TestCase {
 
 	private Type[] types = new Type[] { ft.integerType(), ft.doubleType(),
 			ft.sourceLocationType(), ft.sourceRangeType(), ft.valueType(),
-			ft.listType(ft.integerType()), ft.setTypeOf(ft.doubleType()) };
+			ft.listType(ft.integerType()), ft.setType(ft.doubleType()) };
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -61,15 +61,15 @@ public class TestTypeFactory extends TestCase {
 		NamedType type = ft.namedType("myObjectType", ft.objectType(Double.class));
         
         try {
-          ff.object(type, new Integer(1));
-          fail("should not be able to store an integer object in a double value");
+        	type.make(ff, 1);
+            fail("should not be able to store an integer object in a double value");
         }
         catch (FactTypeError e) {
         	// this should happen
         }
         
         try {
-        	ff.object(type, new Object());
+        	type.make(ff, new Object());
         	fail("should not be able to store an object object in a double value");
         } catch (FactTypeError e) {
         	// this should happen
@@ -78,7 +78,7 @@ public class TestTypeFactory extends TestCase {
         NamedType type2 = ft.namedType("myObjectType2", ft
         		.objectType(Object.class));
         try {
-        	ff.object(type2, new Integer(1));
+        	type2.make(ff, 1);
         	fail("Java subtyping does not carry over to our type system");
         } catch (FactTypeError e) {
         	// this should happen
@@ -123,9 +123,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfType() {
-		TupleType t = ft.tupleTypeOf(types[0]);
+		TupleType t = ft.tupleType(types[0]);
 
-		if (t != ft.tupleTypeOf(types[0])) {
+		if (t != ft.tupleType(types[0])) {
 			fail("tuple types should be canonical");
 		}
 
@@ -133,9 +133,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1]);
+		TupleType t = ft.tupleType(types[0], types[1]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1])) {
+		if (t != ft.tupleType(types[0], types[1])) {
 			fail("tuple types should be canonical");
 		}
 
@@ -143,9 +143,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1], types[2]);
+		TupleType t = ft.tupleType(types[0], types[1], types[2]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1], types[2])) {
+		if (t != ft.tupleType(types[0], types[1], types[2])) {
 			fail("tuple types should be canonical");
 		}
 
@@ -153,9 +153,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeTypeTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1], types[2], types[3]);
+		TupleType t = ft.tupleType(types[0], types[1], types[2], types[3]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1], types[2], types[3])) {
+		if (t != ft.tupleType(types[0], types[1], types[2], types[3])) {
 			fail("tuple types should be canonical");
 		}
 
@@ -163,10 +163,10 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeTypeTypeTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		TupleType t = ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		if (t != ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4])) {
 			fail("tuple types should be canonical");
 		}
@@ -175,10 +175,10 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeTypeTypeTypeTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		TupleType t = ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4], types[5]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		if (t != ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4], types[5])) {
 			fail("tuple types should be canonical");
 		}
@@ -187,10 +187,10 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testTupleTypeOfTypeTypeTypeTypeTypeTypeType() {
-		TupleType t = ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		TupleType t = ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4], types[5], types[6]);
 
-		if (t != ft.tupleTypeOf(types[0], types[1], types[2], types[3],
+		if (t != ft.tupleType(types[0], types[1], types[2], types[3],
 				types[4], types[5], types[6])) {
 			fail("tuple types should be canonical");
 		}
@@ -230,9 +230,9 @@ public class TestTypeFactory extends TestCase {
 				ff.sourceLocation("bla", ff.sourceRange(0, 0, 0, 0, 0, 0)) };
 		IValue[] b = new IValue[] { ff.integer(1), ff.dubble(1.0),
 				ff.sourceLocation("bla", ff.sourceRange(0, 0, 0, 0, 0, 0)) };
-		TupleType t = ft.tupleTypeOf(a);
+		TupleType t = ft.tupleType(a);
 
-		if (t != ft.tupleTypeOf(b)) {
+		if (t != ft.tupleType(b)) {
 			fail("tuples should be canonical");
 		}
 
@@ -240,9 +240,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testSetTypeOf() {
-		SetType type = ft.setTypeOf(ft.integerType());
+		SetType type = ft.setType(ft.integerType());
 
-		if (type != ft.setTypeOf(ft.integerType())) {
+		if (type != ft.setType(ft.integerType())) {
 			fail("set should be canonical");
 		}
 	}
@@ -256,18 +256,11 @@ public class TestTypeFactory extends TestCase {
 		}
 
 		try {
-			ft.relType(ft.integerType());
-			fail("just created a bogus relation type");
-		} catch (FactTypeError e) {
-			// test succeeded
-		}
-		
-		try {
-			Type namedType = ft.namedType("myTuple", ft.tupleTypeOf(ft.integerType(), ft.integerType()));
+			NamedType namedType = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be Type
 			RelationType type = ft.relType(namedType);
 		
-			Type namedType2 = ft.namedType("myTuple", ft.tupleTypeOf(ft.integerType(), ft.integerType()));
+			NamedType namedType2 = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relType(namedType2)) {
 				fail("relation types should be canonical");
@@ -284,11 +277,11 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeNamedType() {
 		try {
-			NamedType namedType = ft.namedType("myTuple", ft.tupleTypeOf(ft.integerType(), ft.integerType()));
+			NamedType namedType = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be NamedType
 			RelationType type = ft.relType(namedType);
 		
-			NamedType namedType2 = ft.namedType("myTuple", ft.tupleTypeOf(ft.integerType(), ft.integerType()));
+			NamedType namedType2 = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relType(namedType2)) {
 				fail("relation types should be canonical");
@@ -300,11 +293,11 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeTupleType() {
 			TupleType tupleType = ft
-				.tupleTypeOf(ft.integerType(), ft.integerType());
+				.tupleType(ft.integerType(), ft.integerType());
 		// note that the declared type of tupleType needs to be TupleType
 		RelationType type = ft.relType(tupleType);
 
-		TupleType tupleType2 = ft.tupleTypeOf(ft.integerType(), ft
+		TupleType tupleType2 = ft.tupleType(ft.integerType(), ft
 				.integerType());
 
 		if (type != ft.relType(tupleType2)) {
@@ -313,9 +306,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testRelTypeOfType() {
-		RelationType type = ft.relTypeOf(types[0]);
+		RelationType type = ft.relType(types[0]);
 
-		if (type != ft.relTypeOf(types[0])) {
+		if (type != ft.relType(types[0])) {
 			fail("relation types should be canonical");
 		}
 
@@ -323,9 +316,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testRelTypeOfTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1]);
+		RelationType type = ft.relType(types[0], types[1]);
 
-		if (type != ft.relTypeOf(types[0], types[1])) {
+		if (type != ft.relType(types[0], types[1])) {
 			fail("relation types should be canonical");
 		}
 
@@ -333,9 +326,9 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testRelTypeOfTypeTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1], types[2]);
+		RelationType type = ft.relType(types[0], types[1], types[2]);
 
-		if (type != ft.relTypeOf(types[0], types[1], types[2])) {
+		if (type != ft.relType(types[0], types[1], types[2])) {
 			fail("relation types should be canonical");
 		}
 
@@ -343,36 +336,36 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testRelTypeOfTypeTypeTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1], types[2], types[3]);
+		RelationType type = ft.relType(types[0], types[1], types[2], types[3]);
 
-		if (type != ft.relTypeOf(types[0], types[1], types[2], types[3])) {
+		if (type != ft.relType(types[0], types[1], types[2], types[3])) {
 			fail("relation types should be canonical");
 		}
 		testRelationTypeOf(type, 4);
 	}
 
 	public void testRelTypeOfTypeTypeTypeTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1], types[2], types[3], types[4]);
+		RelationType type = ft.relType(types[0], types[1], types[2], types[3], types[4]);
 
-		if (type != ft.relTypeOf(types[0], types[1], types[2], types[3], types[4])) {
+		if (type != ft.relType(types[0], types[1], types[2], types[3], types[4])) {
 			fail("relation types should be canonical");
 		}
 		testRelationTypeOf(type, 5);
 	}
 
 	public void testRelTypeOfTypeTypeTypeTypeTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1], types[2], types[3], types[4], types[5]);
+		RelationType type = ft.relType(types[0], types[1], types[2], types[3], types[4], types[5]);
 
-		if (type != ft.relTypeOf(types[0], types[1], types[2], types[3], types[4], types[5])) {
+		if (type != ft.relType(types[0], types[1], types[2], types[3], types[4], types[5])) {
 			fail("relation types should be canonical");
 		}
 		testRelationTypeOf(type, 6);
 	}
 
 	public void testRelTypeOfTypeTypeTypeTypeTypeTypeType() {
-		RelationType type = ft.relTypeOf(types[0], types[1], types[2], types[3], types[4], types[5], types[6]);
+		RelationType type = ft.relType(types[0], types[1], types[2], types[3], types[4], types[5], types[6]);
 
-		if (type != ft.relTypeOf(types[0], types[1], types[2], types[3], types[4], types[5], types[6])) {
+		if (type != ft.relType(types[0], types[1], types[2], types[3], types[4], types[5], types[6])) {
 			fail("relation types should be canonical");
 		}
 		testRelationTypeOf(type, 7);

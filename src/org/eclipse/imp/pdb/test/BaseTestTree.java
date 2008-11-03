@@ -27,10 +27,10 @@ public abstract class BaseTestTree extends TestCase {
     private TypeFactory tf = TypeFactory.getInstance();
     
     TreeSortType Boolean = tf.treeSortType("Boolean");
-    TupleType BoolBinOp = tf.tupleTypeOf(Boolean, Boolean);
-    TupleType BoolOp = tf.tupleTypeOf(Boolean);
-    TreeNodeType True = tf.treeType(Boolean, "true");
-    TreeNodeType False = tf.treeType(Boolean, "false");
+    TupleType BoolBinOp = tf.tupleType(Boolean, Boolean);
+    TupleType BoolOp = tf.tupleType(Boolean);
+    TreeNodeType True = tf.treeNodeType(Boolean, "true");
+    TreeNodeType False = tf.treeNodeType(Boolean, "false");
     TreeNodeType And = tf.treeNodeType(Boolean, "and", BoolBinOp);
     TreeNodeType Or = tf.treeNodeType(Boolean, "and", BoolBinOp);
     TreeNodeType Not = tf.treeNodeType(Boolean, "not", BoolOp);

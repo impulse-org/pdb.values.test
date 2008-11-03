@@ -69,20 +69,20 @@ public class TestType extends TestCase {
 		int max1 = COMBINATION_UPPERBOUND;
 		
 		for (Type t1 : allTypes) {
-			newTypes.add(ft.tupleTypeOf(t1));
-			newTypes.add(ft.relTypeOf(t1));
-			newTypes.add(ft.setTypeOf(t1));
+			newTypes.add(ft.tupleType(t1));
+			newTypes.add(ft.relType(t1));
+			newTypes.add(ft.setType(t1));
 			newTypes.add(ft.namedType("type_" + allTypes.size() + newTypes.size(), t1));
 			int max2 = COMBINATION_UPPERBOUND;
 			
 			for (Type t2 : allTypes) {
-				newTypes.add(ft.tupleTypeOf(t1, t2));
-				newTypes.add(ft.relTypeOf(t1, t2));
+				newTypes.add(ft.tupleType(t1, t2));
+				newTypes.add(ft.relType(t1, t2));
 				int max3 = COMBINATION_UPPERBOUND;
 				
 				for (Type t3 : allTypes) {
-					newTypes.add(ft.tupleTypeOf(t1, t2, t3));
-					newTypes.add(ft.relTypeOf(t1, t2, t3));
+					newTypes.add(ft.tupleType(t1, t2, t3));
+					newTypes.add(ft.relType(t1, t2, t3));
 					if (max3-- == 0) {
 						break;
 					}
@@ -180,9 +180,9 @@ public class TestType extends TestCase {
 		int count = 0;
 		for (Type t1 : allTypes) {
 			for (Type t2 : allTypes) {
-				if (t1.getTypeDescriptor().equals(t2.getTypeDescriptor())) {
+				if (t1.toString().equals(t2.toString())) {
 					if (t1 != t2) {
-						System.err.println("Type descriptors should be canonical:" + t1.getTypeDescriptor() + " == " + t2.getTypeDescriptor());
+						System.err.println("Type descriptors should be canonical:" + t1.toString() + " == " + t2.toString());
 					}
 				}
 				if (count ++ > 10000) {

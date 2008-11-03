@@ -24,6 +24,7 @@ import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestValueFactory extends TestCase {
@@ -49,14 +50,8 @@ public abstract class BaseTestValueFactory extends TestCase {
 	
 	public void testRelationNamedType() {
 		try {
-			ff.relation(ft.namedType("myType", ft.integerType()));
-			fail("created a relation of type int, which should be impossible.");
-		} catch (FactTypeError e) {
-			// test succeeded
-		}
-		
-		try {
-			IRelation r = ff.relation(ft.namedType("myType2", ft.relTypeOf(ft.integerType(), ft.integerType())));
+			Type type = ft.namedType("myType2", ft.relType(ft.integerType(), ft.integerType()));
+			IRelation r = (IRelation) type.make(ff);
 			
 			if (!r.getType().getBaseType().isRelationType()) {
 				fail("relation does not have a relation type");
@@ -67,13 +62,13 @@ public abstract class BaseTestValueFactory extends TestCase {
 	}
 
 	public void testRelationTupleType() {
-		IRelation r = ff.relation(ft.tupleTypeOf(ft.integerType()));
+		IRelation r = ff.relation(ft.tupleType(ft.integerType()));
 
 		if (r.size() != 0) {
 			fail("empty set is not empty");
 		}
 
-		if (r.getType() != ft.relType(ft.tupleTypeOf(ft.integerType()))) {
+		if (r.getType() != ft.relType(ft.tupleType(ft.integerType()))) {
 			fail("should be a rel of unary int tuples");
 		}
 	}
@@ -87,26 +82,19 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 
 		try {
-			relations[0] = ff.relationWith(tuples[0]);
-			relations[1] = ff.relationWith(tuples[0], tuples[1]);
-			relations[2] = ff.relationWith(tuples[0], tuples[1], tuples[2]);
-			relations[3] = ff.relationWith(tuples[0], tuples[1], tuples[2],
+			relations[0] = ff.relation(tuples[0]);
+			relations[1] = ff.relation(tuples[0], tuples[1]);
+			relations[2] = ff.relation(tuples[0], tuples[1], tuples[2]);
+			relations[3] = ff.relation(tuples[0], tuples[1], tuples[2],
 					tuples[3]);
-			relations[4] = ff.relationWith(tuples[0], tuples[1], tuples[2],
+			relations[4] = ff.relation(tuples[0], tuples[1], tuples[2],
 					tuples[3], tuples[4]);
-			relations[5] = ff.relationWith(tuples[0], tuples[1], tuples[2],
+			relations[5] = ff.relation(tuples[0], tuples[1], tuples[2],
 					tuples[3], tuples[4], tuples[5]);
-			relations[6] = ff.relationWith(tuples[0], tuples[1], tuples[2],
+			relations[6] = ff.relation(tuples[0], tuples[1], tuples[2],
 					tuples[3], tuples[4], tuples[5], tuples[6]);
 
 			for (int i = 0; i < 7; i++) {
-				try {
-					relations[i].getWriter();
-				}
-				catch (IllegalStateException e) {
-					fail("relationWith should return a mutable relation");
-				}
-				
 				for (int j = 0; j < i; j++) {
 					if (!relations[i].contains(tuples[j])) {
 						fail("tuple creation is weird");
@@ -122,10 +110,9 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testSetNamedType() {
 		ISet l;
 		try {
-			l = ff.set(ft.namedType("mySet", ft.setTypeOf(ft.integerType())));
+			l = (ISet) ft.namedType("mySet", ft.setType(ft.integerType())).make(ff);
 
-			if (l.getType() != ft.namedType("mySet", ft.setTypeOf(ft
-					.integerType()))) {
+			if (l.getType().isSubtypeOf(ft.namedType("mySet", ft.setType(ft.integerType())))) {
 				fail("should be a set of integers");
 			}
 
@@ -141,7 +128,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 		
 		try {
-			ff.set(ft.namedType("notASet", ft.integerType()));
+			ft.namedType("notASet", ft.integerType()).make(ff);
 			fail("should not be possible to make a set that is not a set");
 		}
 		catch (FactTypeError e) {
@@ -156,7 +143,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			fail("empty set is not empty");
 		}
 		
-		if (s.getType() != ft.setTypeOf(ft.doubleType())) {
+		if (s.getType() != ft.setType(ft.doubleType())) {
 			fail("should be a list of doubles");
 		}
 
@@ -168,21 +155,22 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testSetWith() {
         ISet[] sets = new ISet[7];
 		
-		sets[0] = ff.setWith(integers[0]);
-		sets[1] = ff.setWith(integers[0],integers[1]);
-		sets[2] = ff.setWith(integers[0],integers[1],integers[2]);
-		sets[3] = ff.setWith(integers[0],integers[1],integers[2],integers[3]);
-		sets[4] = ff.setWith(integers[0],integers[1],integers[2],integers[3],integers[4]);
-		sets[5] = ff.setWith(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5]);
-		sets[6] = ff.setWith(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5],integers[6]);
+		sets[0] = ff.set(integers[0]);
+		sets[1] = ff.set(integers[0],integers[1]);
+		sets[2] = ff.set(integers[0],integers[1],integers[2]);
+		sets[3] = ff.set(integers[0],integers[1],integers[2],integers[3]);
+		sets[4] = ff.set(integers[0],integers[1],integers[2],integers[3],integers[4]);
+		sets[5] = ff.set(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5]);
+		sets[6] = ff.set(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5],integers[6]);
 
 		try {
 			for (int i = 0; i < 7; i++) {
 				try {
 					sets[i].getWriter();
+					fail("set should return an immutable set");
 				}
 				catch (IllegalStateException e) {
-					fail("setWith should return a mutable set");
+					// this should happen
 				}
 				
 				for (int j = 0; j <= i; j++) {
@@ -205,10 +193,10 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testListNamedType() {
 		IList l;
 		try {
-			l = ff.list(ft.namedType("myList", ft.listType(ft.integerType())));
+			l = (IList) ft.namedType("myList", ft.listType(ft.integerType())).make(ff);
 
-			if (l.getType() != ft.namedType("myList", ft.listType(ft
-					.integerType()))) {
+			if (l.getType().isSubtypeOf(ft.namedType("myList", ft.listType(ft
+					.integerType())))) {
 				fail("should be a list of integers");
 			}
 
@@ -224,7 +212,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 		
 		try {
-			ff.list(ft.namedType("notAList", ft.integerType()));
+			ft.namedType("notAList", ft.integerType()).make(ff);
 			fail("should not be possible to make a list that is not a list");
 		}
 		catch (FactTypeError e) {
@@ -247,20 +235,21 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testListWith() {
 		IList[] lists = new IList[7];
 		
-		lists[0] = ff.listWith(integers[0]);
-		lists[1] = ff.listWith(integers[0],integers[1]);
-		lists[2] = ff.listWith(integers[0],integers[1],integers[2]);
-		lists[3] = ff.listWith(integers[0],integers[1],integers[2],integers[3]);
-		lists[4] = ff.listWith(integers[0],integers[1],integers[2],integers[3],integers[4]);
-		lists[5] = ff.listWith(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5]);
-		lists[6] = ff.listWith(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5],integers[6]);
+		lists[0] = ff.list(integers[0]);
+		lists[1] = ff.list(integers[0],integers[1]);
+		lists[2] = ff.list(integers[0],integers[1],integers[2]);
+		lists[3] = ff.list(integers[0],integers[1],integers[2],integers[3]);
+		lists[4] = ff.list(integers[0],integers[1],integers[2],integers[3],integers[4]);
+		lists[5] = ff.list(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5]);
+		lists[6] = ff.list(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5],integers[6]);
 
 		for (int i = 0; i < 7; i++) {
 			try {
 			  lists[0].getWriter();
+			  fail("list should produce an immutable list");
 			}
 			catch (IllegalStateException e) {
-				fail("listWith should produce a mutable list");
+				// this should happen
 			}
 			
 			for (int j = 0; j <= i; j++) {
