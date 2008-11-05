@@ -87,7 +87,7 @@ public class TestIO extends TestCase {
 	}
 	
 	private String strip(String string) {
-		string = string.substring(string.lastIndexOf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+		string = string.substring(string.lastIndexOf("?>"));
 		string = string.replaceAll(" ", "");
 		return string;
 	}
