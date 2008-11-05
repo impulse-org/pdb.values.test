@@ -47,51 +47,16 @@ public abstract class BaseTestSet extends TestCase {
 			doubles[i] = vf.dubble(i);
 		}
 		
-		integerUniverse = vf.set(tf.integerType());
-		ISetWriter w = integerUniverse.getWriter();
+		ISetWriter w = vf.setWriter(tf.integerType());
 		
 		try {
 			for (IValue v : integers) {
 				w.insert(v);
 			}
+			
+			integerUniverse = w.done();
 		} catch (FactTypeError e) {
 			fail("this should be type correct");
-		}
-	}
-
-	public void testGetWriter() {
-		ISet set = vf.set(tf.integerType());
-		ISetWriter w = set.getWriter();
-		
-		if (w == null) {
-			fail("getWriter should never return null");
-		}
-		
-		try {
-			ISetWriter w2 = set.getWriter();
-			
-			if (w != w2) {
-				fail("every value should have a single writer");
-			}
-		}
-		catch (IllegalStateException e) {
-			fail("should be able to get the same writer twice");
-		}
-		
-		try {
-			w.insert(integers[0]);
-		} catch (FactTypeError e1) {
-			fail("this should work");
-		}
-		
-		w.done();
-		
-		try {
-		  set.getWriter();
-		  fail("should not be able to get a writer after done was called");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
 		}
 	}
 
@@ -110,12 +75,6 @@ public abstract class BaseTestSet extends TestCase {
 				fail("insertion failed");
 			}
 			
-			try {
-				set2.getWriter();
-				fail("should return immutable values");
-			} catch (IllegalStateException e) {
-				// should happen
-			}
 		} catch (FactTypeError e1) {
 			fail("type checking error");
 		}
@@ -127,11 +86,11 @@ public abstract class BaseTestSet extends TestCase {
 			// this should happen
 		}
 		
-		ISet numberSet = vf.set(tf.valueType());
+		ISetWriter numberSet = vf.setWriter(tf.valueType());
 		
 		try {
-			numberSet.getWriter().insert(integers[0]);
-			numberSet.getWriter().insert(doubles[0]);
+			numberSet.insert(integers[0]);
+			numberSet.insert(doubles[0]);
 		} catch (FactTypeError e) {
 			fail("should be able to insert subtypes");
 		}
@@ -193,14 +152,6 @@ public abstract class BaseTestSet extends TestCase {
 			
 			if (!set5.intersect(set3).isEmpty()) {
 				fail("non-intersection sets");
-			}
-			
-			try {
-			  set1.intersect(set2).getWriter();
-			  fail("intersection should return immutable set");
-			}
-			catch (IllegalStateException e) {
-		      // this should happen
 			}
 			
 		} catch (FactTypeError et) {
@@ -309,14 +260,6 @@ public abstract class BaseTestSet extends TestCase {
 				fail("subtract failed");
 			}
 			
-			try {
-			  set1.subtract(set2).getWriter();
-			  fail("subtraction should return immutable set");
-			}
-			catch (IllegalStateException e) {
-		      // this should happen
-			}
-			
 		} catch (FactTypeError et) {
 			fail("this shouls all be typesafe");
 		}
@@ -373,14 +316,6 @@ public abstract class BaseTestSet extends TestCase {
 				fail("union failed");
 			}
 			
-			try {
-			  set1.union(set2).getWriter();
-			  fail("unionion should return immutable set");
-			}
-			catch (IllegalStateException e) {
-		      // this should happen
-			}
-			
 		} catch (FactTypeError et) {
 			fail("this shouls all be typesafe");
 		}
@@ -426,13 +361,6 @@ public abstract class BaseTestSet extends TestCase {
 		try {
 			IRelation rel = set.toRelation();
 			
-			try {
-				rel.getWriter();
-				fail("toRelation should return an immutable set");
-			} catch (IllegalStateException e) {
-				// this should happen
-			}
-			
 			for (ITuple v : rel) {
 				if (!set.contains(v)) {
 					fail("toRel invented elements");
@@ -468,13 +396,6 @@ public abstract class BaseTestSet extends TestCase {
 			fail("product's size should be square of size");
 		}
 		
-		try {
-			prod.getWriter();
-			fail("prod should return an immutable value");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
-		}
 	}
 	
 	public void testProductIRelation() {
@@ -490,12 +411,5 @@ public abstract class BaseTestSet extends TestCase {
 			fail("product's size should be multiplication of arguments' sizes");
 		}
 		
-		try {
-			prod.getWriter();
-			fail("prod should return an immutable value");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
-		}
 	}
 }

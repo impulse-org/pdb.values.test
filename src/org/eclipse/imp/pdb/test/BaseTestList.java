@@ -35,8 +35,7 @@ public abstract class BaseTestList extends TestCase {
 		vf = factory;
 		
 		integers = new IValue[20];
-		integerList = vf.list(tf.integerType());
-		IListWriter w = integerList.getWriter();
+		IListWriter w = vf.listWriter(tf.integerType());
 		
 		for (int i = 0; i < integers.length; i++) {
 			integers[i] = vf.integer(i);
@@ -45,6 +44,8 @@ public abstract class BaseTestList extends TestCase {
 		for (int i = integers.length - 1; i >= 0; i--) {
 			w.insert(vf.integer(i));
 		}
+		
+		integerList = w.done();
 	}
 
 	public void testGetElementType() {
@@ -76,13 +77,6 @@ public abstract class BaseTestList extends TestCase {
 				fail("element was not appended");
 			}
 			
-			try {
-				longer.getWriter();
-				fail("append should return an immutable value");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
 		} catch (FactTypeError e) {
 			fail("the above should be type correct");
 		}
@@ -116,13 +110,6 @@ public abstract class BaseTestList extends TestCase {
 				fail("element was not insrrted");
 			}
 			
-			try {
-				longer.getWriter();
-				fail("insert should return an immutable value");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
 		} catch (FactTypeError e) {
 			fail("the above should be type correct");
 		}
@@ -161,14 +148,6 @@ public abstract class BaseTestList extends TestCase {
 				fail("reverse did something funny");
 			}
 		}
-		
-		try {
-		  reverse.getWriter();
-		  fail("reverse should return an immutable list");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
-		}
 	}
 
 	public void testIterator() {
@@ -183,26 +162,4 @@ public abstract class BaseTestList extends TestCase {
 		}
 	}
 
-	public void testGetWriter() {
-		try {
-			IListWriter w1 = integerList.getWriter();
-			IListWriter w2 = integerList.getWriter();
-			
-			if (w1 != w2) {
-				fail("writer should be single for a single value");
-			}
-			
-			w1.done();
-			
-			try {
-				w2.insert(integers[0]);
-			} catch (IllegalStateException e) {
-				// this should happen
-			} catch (FactTypeError e) {
-				fail("the insertion should be type safe");
-			}
-		} catch (IllegalStateException e) {
-			fail("should be able to get writer more than once");
-		}
-	}
 }

@@ -165,14 +165,6 @@ public abstract class BaseTestValueFactory extends TestCase {
 
 		try {
 			for (int i = 0; i < 7; i++) {
-				try {
-					sets[i].getWriter();
-					fail("set should return an immutable set");
-				}
-				catch (IllegalStateException e) {
-					// this should happen
-				}
-				
 				for (int j = 0; j <= i; j++) {
 					if (!sets[i].contains(integers[j])) {
 						fail("set creation is weird");
@@ -244,14 +236,6 @@ public abstract class BaseTestValueFactory extends TestCase {
 		lists[6] = ff.list(integers[0],integers[1],integers[2],integers[3],integers[4],integers[5],integers[6]);
 
 		for (int i = 0; i < 7; i++) {
-			try {
-			  lists[0].getWriter();
-			  fail("list should produce an immutable list");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
-			
 			for (int j = 0; j <= i; j++) {
 				if (lists[i].get(j) != integers[j]) {
 					fail("list creation is weird");

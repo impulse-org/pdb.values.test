@@ -45,29 +45,26 @@ public abstract class BaseTestRelation extends TestCase {
 		tf = TypeFactory.getInstance();
 		
 		integers = new IValue[5];
-		setOfIntegers = vf.set(tf.integerType());
-		ISetWriter sw = setOfIntegers.getWriter();
+		ISetWriter sw = vf.setWriter(tf.integerType());
 		
 		for (int i = 0; i < integers.length; i++) {
 			IValue iv = vf.integer(i);
 			integers[i] = iv;
 			sw.insert(iv);
 		}
-		sw.done();
+		setOfIntegers = sw.done();
 		
 		doubles = new IValue[10];
-		setOfDoubles = vf.set(tf.doubleType());
-		ISetWriter sw2 = setOfDoubles.getWriter();
+		ISetWriter sw2 = vf.setWriter(tf.doubleType());
 		
 		for (int i = 0; i < doubles.length; i++) {
 			IValue iv = vf.dubble(i);
 			doubles[i] = iv;
 			sw2.insert(iv);
 		}
-		sw2.done();
+		setOfDoubles = sw2.done();
 		
-		integerRelation = vf.relation(tf.tupleType(tf.integerType(), tf.integerType()));
-		IRelationWriter rw = integerRelation.getWriter();
+		IRelationWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
 		integerTuples = new ITuple[integers.length * integers.length];
 		
 		for (int i = 0; i < integers.length; i++) {
@@ -77,10 +74,9 @@ public abstract class BaseTestRelation extends TestCase {
 				rw.insert(t);
 			}
 		}
-		rw.done();
+		integerRelation = rw.done();
 		
-		doubleRelation = vf.relation(tf.tupleType(tf.doubleType(), tf.doubleType()));
-		IRelationWriter rw2 = doubleRelation.getWriter();
+		IRelationWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
 		doubleTuples = new ITuple[doubles.length * doubles.length];
 		
 		for (int i = 0; i < doubles.length; i++) {
@@ -90,7 +86,7 @@ public abstract class BaseTestRelation extends TestCase {
 				rw2.insert(t);
 			}
 		}
-		rw2.done();
+		doubleRelation = rw2.done();
 	}
 
 	public void testIsEmpty() {
@@ -125,14 +121,6 @@ public abstract class BaseTestRelation extends TestCase {
 		if (prod.size() != integerRelation.size() * integerRelation.size()) {
 			fail("size of product should be square of size of integerRelation");
 		}
-		
-		try {
-			prod.getWriter();
-			fail("prod should return an immutable value");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
-		}
 	}
 
 	public void testProductISet() {
@@ -144,14 +132,6 @@ public abstract class BaseTestRelation extends TestCase {
 		
 		if (prod.size() != integerRelation.size() * setOfIntegers.size()) {
 			fail("size of product should be square of size of integerRelation");
-		}
-		
-		try {
-			prod.getWriter();
-			fail("prod should return an immutable value");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
 		}
 	}
 
@@ -193,14 +173,6 @@ public abstract class BaseTestRelation extends TestCase {
 			
 			IRelation test = vf.relation(t1, t2, t3);
 			IRelation closed = test.closure();
-			
-			try {
-				closed.getWriter();
-				fail("closure should return an immutable relation");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
 			
 			if (closed.arity() != test.arity()) {
 				fail("closure should produce relations of same arity");
@@ -300,33 +272,18 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 			
 			try {
-				rel.getWriter();
-				fail("insert should return an immutable relation");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
-			
-			try {
 			   vf.relation(vf.tuple(integers[0], integers[0]));
 			}
 			catch (IllegalStateException e) {
 				// this should happen
 			}
 			
-			IRelation rel3 = vf.relation(tf.tupleType(tf.integerType(), tf.integerType()));
-			rel3.getWriter().insertAll(integerRelation);
+			IRelationWriter relw3 = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
+			relw3.insertAll(integerRelation);
+			IRelation rel3 = relw3.done();
 			 
 			final ITuple tuple = vf.tuple(vf.integer(100), vf.integer(100));
 			IRelation rel4 = rel3.insert(tuple);
-			
-			try {
-				rel4.getWriter();
-				fail("insert should return an immutable relation");
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
 			
 			if (rel4.size() != integerRelation.size() + 1) {
 				fail("insert failed");
@@ -432,12 +389,12 @@ public abstract class BaseTestRelation extends TestCase {
 	}
 
 	public void testInvertIRelation() {
-		IRelation test = vf.relation(tf.tupleType(tf.integerType(), tf
-				.integerType()));
+		IRelation test = null;
 	
 		final int amount = integers.length / 2;
 		try {
-			IRelationWriter rw = test.getWriter();
+			IRelationWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf
+				.integerType()));
 
 			for (int i = 0; i < amount; i++) {
 				for (int j = 0; j < amount; j++) {
@@ -445,7 +402,8 @@ public abstract class BaseTestRelation extends TestCase {
 					rw.insert(t);
 				}
 			}
-			rw.done();
+			
+			test = rw.done();
 		} catch (FactTypeError e) {
 			fail("creation of test data should be type correct");
 		}
@@ -483,12 +441,12 @@ public abstract class BaseTestRelation extends TestCase {
 	}
 
 	public void testInvertISet() {
-		ISet test = vf.set(tf.tupleType(tf.integerType(), tf
-				.integerType()));
+		ISet test = null;
 	
 		final int amount = integers.length / 2;
 		try {
-			ISetWriter rw = test.getWriter();
+			ISetWriter rw = vf.setWriter(tf.tupleType(tf.integerType(), tf
+				.integerType()));
 
 			for (int i = 0; i < amount; i++) {
 				for (int j = 0; j < amount; j++) {
@@ -496,7 +454,7 @@ public abstract class BaseTestRelation extends TestCase {
 					rw.insert(t);
 				}
 			}
-			rw.done();
+			test = rw.done();
 		} catch (FactTypeError e) {
 			fail("creation of test data should be type correct");
 		}
@@ -779,41 +737,5 @@ public abstract class BaseTestRelation extends TestCase {
 			fail("the above should be type correct");
 		}
 		
-	}
-
-	public void testGetWriter() {
-		IRelation rel = vf.relation(tf.tupleType(tf.integerType(), tf.integerType()));
-		IRelationWriter w = rel.getWriter();
-		
-		if (w == null) {
-			fail("getWriter should never return null");
-		}
-		
-		try {
-			IRelationWriter w2 = rel.getWriter();
-			
-			if (w != w2) {
-				fail("every value should have a single writer");
-			}
-		}
-		catch (IllegalStateException e) {
-			fail("should be able to get the same writer twice");
-		}
-		
-		try {
-			w.insert(vf.tuple(integers[0],integers[0]));
-		} catch (FactTypeError e1) {
-			fail("this should work");
-		}
-		
-		w.done();
-		
-		try {
-		  rel.getWriter();
-		  fail("should not be able to get a writer after done was called");
-		}
-		catch (IllegalStateException e) {
-			// this should happen
-		}
 	}
 }
