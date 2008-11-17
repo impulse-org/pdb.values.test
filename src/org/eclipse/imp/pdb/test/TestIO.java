@@ -25,15 +25,15 @@ import org.eclipse.imp.pdb.facts.io.XMLReader;
 import org.eclipse.imp.pdb.facts.io.XMLWriter;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.TreeNodeType;
-import org.eclipse.imp.pdb.facts.type.TreeSortType;
+import org.eclipse.imp.pdb.facts.type.NamedTreeType;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public class TestIO extends TestCase {
 	private static TypeFactory tf = TypeFactory.getInstance();
 	private static IValueFactory vf = ValueFactory.getInstance();
-	private static TreeSortType Boolean = tf.treeSortType("Boolean");
+	private static NamedTreeType Boolean = tf.namedTreeType("Boolean");
 	
-	private static TreeSortType Name = tf.treeSortType("Name");
+	private static NamedTreeType Name = tf.namedTreeType("Name");
 	private static TreeNodeType True = tf.treeNodeType(Boolean, "true");
 	private static TreeNodeType False= tf.treeNodeType(Boolean, "false");
 	private static TreeNodeType And= tf.treeNodeType(Boolean, "and", Boolean, Boolean);

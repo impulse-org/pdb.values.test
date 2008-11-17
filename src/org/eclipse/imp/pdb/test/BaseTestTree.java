@@ -18,7 +18,7 @@ import org.eclipse.imp.pdb.facts.ITree;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.TreeNodeType;
-import org.eclipse.imp.pdb.facts.type.TreeSortType;
+import org.eclipse.imp.pdb.facts.type.NamedTreeType;
 import org.eclipse.imp.pdb.facts.type.TupleType;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
@@ -26,7 +26,7 @@ public abstract class BaseTestTree extends TestCase {
     private IValueFactory vf;
     private TypeFactory tf = TypeFactory.getInstance();
     
-    TreeSortType Boolean = tf.treeSortType("Boolean");
+    NamedTreeType Boolean = tf.namedTreeType("Boolean");
     TupleType BoolBinOp = tf.tupleType(Boolean, Boolean);
     TupleType BoolOp = tf.tupleType(Boolean);
     TreeNodeType True = tf.treeNodeType(Boolean, "true");
