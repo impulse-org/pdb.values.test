@@ -19,7 +19,6 @@ import junit.framework.TestCase;
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
-import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
@@ -348,36 +347,6 @@ public abstract class BaseTestSet extends TestCase {
 		} 
 	}
 
-	public void testToRelation() {
-		try {
-		  integerUniverse.toRelation();
-		  fail("should not be able to cast set that has no tuples");
-		} catch (FactTypeError e) {
-			// this should happen
-		} 
-		
-		ISet set = vf.set(vf.tuple(integers[0], doubles[0]));
-		
-		try {
-			IRelation rel = set.toRelation();
-			
-			for (ITuple v : rel) {
-				if (!set.contains(v)) {
-					fail("toRel invented elements");
-				}
-			}
-			
-			for (IValue v : set) {
-				if (!rel.contains((ITuple) v)) {
-					fail("toRel forgot elements");
-				}
-			}
-			
-		} catch (FactTypeError e) {
-			fail("this toRelation is allowed");
-		}
-	}
-
 	public void testGetElementType() {
 		if (!integerUniverse.getElementType().isIntegerType()) {
 			fail("elementType is broken");
@@ -403,11 +372,11 @@ public abstract class BaseTestSet extends TestCase {
 		IRelation prod = test.product(test);
 		IRelation prod2 = test.product(prod);
 		
-		if (prod2.arity() != 3) {
+		if (prod2.arity() != 2) {
 			fail("product's arity should be 3");
 		}
 		
-		if (prod2.size() != prod.size() * test.size()) {
+		if (prod2.size() != test.size() * prod.size()) {
 			fail("product's size should be multiplication of arguments' sizes");
 		}
 		

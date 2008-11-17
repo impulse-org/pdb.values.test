@@ -17,7 +17,6 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IRelation;
-import org.eclipse.imp.pdb.facts.IRelationWriter;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ITuple;
@@ -64,7 +63,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		setOfDoubles = sw2.done();
 		
-		IRelationWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
+		ISetWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
 		integerTuples = new ITuple[integers.length * integers.length];
 		
 		for (int i = 0; i < integers.length; i++) {
@@ -76,7 +75,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		integerRelation = rw.done();
 		
-		IRelationWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
+		ISetWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
 		doubleTuples = new ITuple[doubles.length * doubles.length];
 		
 		for (int i = 0; i < doubles.length; i++) {
@@ -114,8 +113,8 @@ public abstract class BaseTestRelation extends TestCase {
 	public void testProductIRelation() {
 		IRelation prod = integerRelation.product(integerRelation);
 		
-		if (prod.arity() != 2 * integerRelation.arity()) {
-			fail("arity of product should be 4");
+		if (prod.arity() != 2 ) {
+			fail("arity of product should be 2");
 		}
 		
 		if (prod.size() != integerRelation.size() * integerRelation.size()) {
@@ -126,8 +125,8 @@ public abstract class BaseTestRelation extends TestCase {
 	public void testProductISet() {
 		IRelation prod = integerRelation.product(setOfIntegers);
 		
-		if (prod.arity() != 3) {
-			fail("arity of product should be 3");
+		if (prod.arity() != 2) {
+			fail("arity of product should be 2");
 		}
 		
 		if (prod.size() != integerRelation.size() * setOfIntegers.size()) {
@@ -265,20 +264,13 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testInsert() {
 		try {
-			IRelation rel = integerRelation.insert(vf.tuple(integers[0], integers[0]));
+			IRelation rel = integerRelation.insert(vf.tuple(vf.integer(0),vf.integer(0)));
 			
 			if (!rel.equals(integerRelation)) {
 				fail("insert into a relation of an existing tuple should not change the relation");
 			}
 			
-			try {
-			   vf.relation(vf.tuple(integers[0], integers[0]));
-			}
-			catch (IllegalStateException e) {
-				// this should happen
-			}
-			
-			IRelationWriter relw3 = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
+			ISetWriter relw3 = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
 			relw3.insertAll(integerRelation);
 			IRelation rel3 = relw3.done();
 			 
@@ -393,7 +385,7 @@ public abstract class BaseTestRelation extends TestCase {
 	
 		final int amount = integers.length / 2;
 		try {
-			IRelationWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf
+			ISetWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf
 				.integerType()));
 
 			for (int i = 0; i < amount; i++) {
@@ -415,7 +407,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("inversion failed");
 			}
 			
-			for (ITuple t : test) {
+			for (IValue t : test) {
 				if (inverted.contains(t)) {
 					fail("inversion failed");
 				}
@@ -509,8 +501,12 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		
 		try {
-			if (!integerRelation.subtract(doubleRelation).equals(integerRelation)) {
-				fail("subtracting non-intersection relations should have no effect");
+			try {
+			   integerRelation.subtract(doubleRelation);
+			   fail("relations will statically be non-intersecting if their types are incomparable");
+			}
+			catch (FactTypeError e) {
+				// this should happen
 			}
 
 			IRelation oneTwoThree = vf.relation(integerTuples[0],
@@ -670,11 +666,11 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testIterator() {
 		try {
-			Iterator<ITuple> it = integerRelation.iterator();
+			Iterator<IValue> it = integerRelation.iterator();
 
 			int i;
 			for (i = 0; it.hasNext(); i++) {
-				ITuple t = it.next();
+				ITuple t = (ITuple) it.next();
 
 				if (!integerRelation.contains(t)) {
 					fail("iterator produces strange elements?");
@@ -686,20 +682,6 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 		} catch (FactTypeError e) {
 			fail("the above should be type correct");
-		}
-	}
-
-	public void testToSet() {
-		try {
-			if (!integerRelation.toSet().toRelation().equals(integerRelation)) {
-				fail("toSet and toRelation are supposed to be eachother's inverse");
-			}
-		} catch (FactTypeError e) {
-			fail("should be type correct");
-		}
-		
-		if (integerRelation.size() != integerRelation.toSet().size()) {
-			fail("toSet should produce set of same size");
 		}
 	}
 
