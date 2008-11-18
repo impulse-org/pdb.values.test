@@ -249,13 +249,6 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeType() {
 		try {
-			ft.relType(ft.namedType("myInt", ft.integerType()));
-			fail("just created a bogus relation type");
-		} catch (FactTypeError e) {
-			// test succeeded
-		}
-
-		try {
 			NamedType namedType = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be Type
 			RelationType type = ft.relType(namedType);

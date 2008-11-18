@@ -103,7 +103,7 @@ public class TestType extends TestCase {
 	public void testIsSubtypeOf() {
 		for (Type t : allTypes) {
 			if (!t.isSubtypeOf(t)) {
-				fail("any type should be a subtype of itself");
+				fail("any type should be a subtype of itself: " + t);
 			}
 		}
 		
