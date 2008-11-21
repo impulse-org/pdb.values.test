@@ -253,13 +253,6 @@ public abstract class BaseTestRelation extends TestCase {
 		} catch (FactTypeError e) {
 			fail("this should be type correct");
 		}
-		
-		try {
-			integerRelation.contains(vf.tuple(doubles[0], doubles[0]));
-			fail("should not be able to check for containment of doubles in integer rel");
-		} catch (FactTypeError e) {
-			// this should happen
-		}
 	}
 
 	public void testInsert() {
@@ -501,14 +494,6 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		
 		try {
-			try {
-			   integerRelation.subtract(doubleRelation);
-			   fail("relations will statically be non-intersecting if their types are incomparable");
-			}
-			catch (FactTypeError e) {
-				// this should happen
-			}
-
 			IRelation oneTwoThree = vf.relation(integerTuples[0],
 					integerTuples[1], integerTuples[2]);
 			IRelation threeFourFive = vf.relation(integerTuples[2],

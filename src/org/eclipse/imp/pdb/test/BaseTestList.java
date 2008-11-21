@@ -145,7 +145,7 @@ public abstract class BaseTestList extends TestCase {
 		
 		for (int i = 0; i < integers.length; i++) {
 			if (!reverse.get(i).equals(integers[integers.length - i - 1])) {
-				fail("reverse did something funny");
+				fail("reverse did something funny: " + reverse + " is not reverse of " + integerList);
 			}
 		}
 	}

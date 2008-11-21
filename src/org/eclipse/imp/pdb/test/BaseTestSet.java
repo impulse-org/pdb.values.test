@@ -78,13 +78,6 @@ public abstract class BaseTestSet extends TestCase {
 			fail("type checking error");
 		}
 		
-		try {
-			set2 = set1.insert(doubles[0]);
-			fail("should not be able to insert doubles");
-		} catch (FactTypeError e) {
-			// this should happen
-		}
-		
 		ISetWriter numberSet = vf.setWriter(tf.valueType());
 		
 		try {
@@ -97,13 +90,6 @@ public abstract class BaseTestSet extends TestCase {
 
 	public void testContains() {
 		ISet set1 = vf.set(integers[0], integers[1]);
-		
-		try {
-			set1.contains(doubles[0]);
-			fail("should not be able to check for type that can not be contained");
-		} catch (FactTypeError e) {
-			// this should happen
-		}
 		
 		try {
 			set1.contains(integers[0]);
