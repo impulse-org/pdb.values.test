@@ -15,7 +15,6 @@ package org.eclipse.imp.pdb.test;
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IList;
-import org.eclipse.imp.pdb.facts.IObject;
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISourceLocation;
@@ -41,13 +40,6 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 	}
 
-	public void testObject() {
-		IObject<Integer> object = ff.object(new Integer(168));
-		if (!object.getValue().equals(new Integer(168))) {
-			fail("basic object creation failed");
-		}
-	}
-	
 	public void testRelationNamedType() {
 		try {
 			Type type = ft.namedType("myType2", ft.relType(ft.integerType(), ft.integerType()));

@@ -49,43 +49,6 @@ public class TestTypeFactory extends TestCase {
 		// TODO: needs to be tested, after we've implemented it
 	}
 
-	public void testObjectType() {
-		if (ft.objectType(Integer.class) != ft.objectType(Integer.class)) {
-			fail("objectType should be canonical");
-		}
-		
-		if (ft.objectType(TestTypeFactory.class) != ft.objectType(TestTypeFactory.class)) {
-			fail("objectType should be canonical");
-		}
-		
-		NamedType type = ft.namedType("myObjectType", ft.objectType(Double.class));
-        
-        try {
-        	type.make(ff, 1);
-            fail("should not be able to store an integer object in a double value");
-        }
-        catch (FactTypeError e) {
-        	// this should happen
-        }
-        
-        try {
-        	type.make(ff, new Object());
-        	fail("should not be able to store an object object in a double value");
-        } catch (FactTypeError e) {
-        	// this should happen
-        }
-        
-        NamedType type2 = ft.namedType("myObjectType2", ft
-        		.objectType(Object.class));
-        try {
-        	type2.make(ff, 1);
-        	fail("Java subtyping does not carry over to our type system");
-        } catch (FactTypeError e) {
-        	// this should happen
-        }
-		
-	}
-	
 	public void testValueType() {
 		if (ft.valueType() != ft.valueType()) {
 			fail("valueType should be canonical");
