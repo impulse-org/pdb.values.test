@@ -82,8 +82,9 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			integerList.append(vf.dubble(2));
-			fail("should not be able to insert a double into an integer list");
+			if (!integerList.append(vf.dubble(2)).getElementType().isValueType()) {
+			  fail("append should lub the element type");
+			}
 		} catch (FactTypeError e) {
 			// this should happen
 		}
@@ -115,8 +116,9 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			integerList.insert(vf.dubble(2));
-			fail("should not be able to insert a double into an integer list");
+			if (!integerList.insert(vf.dubble(2)).getElementType().isValueType()) {
+			  fail("insert should lub the element type");
+			}
 		} catch (FactTypeError e) {
 			// this should happen
 		}
