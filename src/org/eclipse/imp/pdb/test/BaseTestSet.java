@@ -154,32 +154,6 @@ public abstract class BaseTestSet extends TestCase {
 		}
 	}
 
-	public void testInvert() {
-		ISet set1 = vf.set(integers[0], integers[1], integers[2]);
-		
-		try {
-			if (set1.invert(integerUniverse).size() != integerUniverse.size() - set1.size()) {
-				fail("universe failed");
-			}
-			
-			if (!set1.invert(integerUniverse).intersect(set1).isEmpty()) {
-				fail("invert is funny");
-			}
-			
-			ISet set2 = set1.insert(vf.integer(integers.length));
-			
-			try {
-				set2.invert(integerUniverse);
-				fail("integerUniverse is not a universe for set, since it is not a superset");
-			}
-			catch (FactTypeError e) {
-				// this should happen
-			}
-		} catch (FactTypeError e) {
-			fail("should be type correct");
-		}
-	}
-
 	public void testIsEmpty() {
 		if (integerUniverse.isEmpty()) {
 			fail("an empty universe is not so cosy");
