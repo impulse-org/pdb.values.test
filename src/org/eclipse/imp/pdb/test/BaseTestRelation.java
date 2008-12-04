@@ -17,6 +17,7 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IRelation;
+import org.eclipse.imp.pdb.facts.IRelationWriter;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ITuple;
@@ -63,7 +64,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		setOfDoubles = sw2.done();
 		
-		ISetWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
+		IRelationWriter rw = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
 		integerTuples = new ITuple[integers.length * integers.length];
 		
 		for (int i = 0; i < integers.length; i++) {
@@ -75,7 +76,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		integerRelation = rw.done();
 		
-		ISetWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
+		IRelationWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
 		doubleTuples = new ITuple[doubles.length * doubles.length];
 		
 		for (int i = 0; i < doubles.length; i++) {
@@ -263,7 +264,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("insert into a relation of an existing tuple should not change the relation");
 			}
 			
-			ISetWriter relw3 = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
+			IRelationWriter relw3 = vf.relationWriter(tf.tupleType(tf.integerType(), tf.integerType()));
 			relw3.insertAll(integerRelation);
 			IRelation rel3 = relw3.done();
 			 

@@ -104,8 +104,8 @@ public abstract class BaseTestValueFactory extends TestCase {
 		try {
 			l = (ISet) ft.namedType("mySet", ft.setType(ft.integerType())).make(ff);
 
-			if (l.getType().isSubtypeOf(ft.namedType("mySet", ft.setType(ft.integerType())))) {
-				fail("should be a set of integers");
+			if (!l.getType().isSubtypeOf(ft.namedType("mySet", ft.setType(ft.integerType())))) {
+				fail("named types should be aliases");
 			}
 
 			if (l.getElementType() != ft.integerType()) {
@@ -179,9 +179,9 @@ public abstract class BaseTestValueFactory extends TestCase {
 		try {
 			l = (IList) ft.namedType("myList", ft.listType(ft.integerType())).make(ff);
 
-			if (l.getType().isSubtypeOf(ft.namedType("myList", ft.listType(ft
+			if (!l.getType().isSubtypeOf(ft.namedType("myList", ft.listType(ft
 					.integerType())))) {
-				fail("should be a list of integers");
+				fail("named types should be aliases");
 			}
 
 			if (l.getElementType() != ft.integerType()) {

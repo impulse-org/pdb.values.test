@@ -119,9 +119,11 @@ public class TestType extends TestCase {
 						continue;
 					}
 					
-					System.err.println("Failure:");
-					System.err.println(t1 + " <= " + t2 + " && " + t2 + " <= " + t1);
-					fail("subtype of should not be symmetric");
+					if (!t1.isNamedType() && !t2.isNamedType()) {
+						System.err.println("Failure:");
+						System.err.println(t1 + " <= " + t2 + " && " + t2 + " <= " + t1);
+						fail("subtype of should not be symmetric");
+					}
 				}
 			}
 		}
