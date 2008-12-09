@@ -12,8 +12,10 @@
 
 package org.eclipse.imp.pdb.test;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -380,5 +382,47 @@ public class TestType extends TestCase {
 			}
 		}
 	}
+	
+	public void testMatchAndInstantiate() {
+		Type X = ft.parameterType("X");
+		Map<Type, Type> bindings = new HashMap<Type, Type>();
+		
+		Type subject = ft.integerType();
+		X.match(subject, bindings);
+		
+		if (!bindings.get(X).equals(subject)) {
+			fail("simple match failed");
+		}
+		
+		if (!X.instantiate(bindings).equals(subject)) {
+			fail("instantiate failed");
+		}
+		
+		Type relXX = ft.relType(X, X);
+		bindings.clear();
+		subject = ft.relType(ft.integerType(), ft.integerType());
+		relXX.match(subject, bindings);
+		
+		if (!bindings.get(X).equals(ft.integerType())) {
+			fail("relation match failed");
+		}
+		
+		if (!relXX.instantiate(bindings).equals(subject)) {
+			fail("instantiate failed");
+		}
+		
+		bindings.clear();
+		subject = ft.relType(ft.integerType(), ft.doubleType());
+		relXX.match(subject, bindings);
+		
+		Type lub = ft.integerType().lub(ft.doubleType());
+		if (!bindings.get(X).equals(lub)) {
+			fail("lubbing during matching failed");
+		}
+		
+		if (!relXX.instantiate(bindings).equals(ft.relType(lub, lub))) {
+			fail("instantiate failed");
+		}
 
+	}
 }
