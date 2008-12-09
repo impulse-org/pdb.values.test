@@ -24,6 +24,7 @@ import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.IntegerType;
 import org.eclipse.imp.pdb.facts.type.ListType;
 import org.eclipse.imp.pdb.facts.type.NamedType;
+import org.eclipse.imp.pdb.facts.type.ParameterType;
 import org.eclipse.imp.pdb.facts.type.RelationType;
 import org.eclipse.imp.pdb.facts.type.SetType;
 import org.eclipse.imp.pdb.facts.type.SourceLocationType;
@@ -385,7 +386,7 @@ public class TestType extends TestCase {
 	
 	public void testMatchAndInstantiate() {
 		Type X = ft.parameterType("X");
-		Map<Type, Type> bindings = new HashMap<Type, Type>();
+		Map<ParameterType, Type> bindings = new HashMap<ParameterType, Type>();
 		
 		Type subject = ft.integerType();
 		X.match(subject, bindings);
