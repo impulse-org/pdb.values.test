@@ -226,8 +226,8 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.doubleType());
 		
 		try {
-			if (dSet.subtract(set1).getElementType() != tf.valueType()) {
-				fail("subtract should produce lub types");
+			if (dSet.subtract(set1).getElementType() != tf.doubleType()) {
+				fail("subtract should produce type of left side");
 			}
 		} catch (FactTypeError e) {
 			// this should not happen

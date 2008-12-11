@@ -385,10 +385,6 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty diff failed");
 			}
 			
-			RelationType type = (RelationType) diff.getType();
-			if (!type.getFieldType(0).isValueType()) {
-				fail("diff should produce lub types");
-			}
 		} catch (FactTypeError e) {
 		    fail("subtracting types which have a lub should be possible");
 		}
@@ -428,10 +424,6 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty diff failed");
 			}
 			
-			RelationType type = (RelationType) diff.getType();
-			if (!type.getFieldType(0).isValueType()) {
-				fail("diff should produce lub types");
-			}
 		} catch (FactTypeError e) {
 		    fail("subtracting types which have a lub should be possible");
 		}
