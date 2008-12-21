@@ -45,7 +45,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			Type type = ft.namedType("myType2", ft.relType(ft.integerType(), ft.integerType()));
 			IRelation r = (IRelation) type.make(ff);
 			
-			if (!r.getType().getBaseType().isRelationType()) {
+			if (!r.getType().isRelationType()) {
 				fail("relation does not have a relation type");
 			}
 		} catch (FactTypeError e) {
@@ -60,7 +60,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			fail("empty set is not empty");
 		}
 
-		if (r.getType() != ft.relType(ft.tupleType(ft.integerType()))) {
+		if (r.getType() != ft.relTypeFromTuple(ft.tupleType(ft.integerType()))) {
 			fail("should be a rel of unary int tuples");
 		}
 	}

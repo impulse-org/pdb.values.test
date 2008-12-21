@@ -17,23 +17,21 @@ import junit.framework.TestCase;
 import org.eclipse.imp.pdb.facts.ITree;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.TreeNodeType;
-import org.eclipse.imp.pdb.facts.type.NamedTreeType;
-import org.eclipse.imp.pdb.facts.type.TupleType;
+import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestTree extends TestCase {
     private IValueFactory vf;
     private TypeFactory tf = TypeFactory.getInstance();
     
-    NamedTreeType Boolean = tf.namedTreeType("Boolean");
-    TupleType BoolBinOp = tf.tupleType(Boolean, Boolean);
-    TupleType BoolOp = tf.tupleType(Boolean);
-    TreeNodeType True = tf.treeNodeType(Boolean, "true");
-    TreeNodeType False = tf.treeNodeType(Boolean, "false");
-    TreeNodeType And = tf.treeNodeType(Boolean, "and", BoolBinOp);
-    TreeNodeType Or = tf.treeNodeType(Boolean, "and", BoolBinOp);
-    TreeNodeType Not = tf.treeNodeType(Boolean, "not", BoolOp);
+    Type Boolean = tf.namedTreeType("Boolean");
+    Type BoolBinOp = tf.tupleType(Boolean, Boolean);
+    Type BoolOp = tf.tupleType(Boolean);
+    Type True = tf.treeNodeType(Boolean, "true");
+    Type False = tf.treeNodeType(Boolean, "false");
+    Type And = tf.treeNodeType(Boolean, "and", BoolBinOp);
+    Type Or = tf.treeNodeType(Boolean, "and", BoolBinOp);
+    Type Not = tf.treeNodeType(Boolean, "not", BoolOp);
     
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();

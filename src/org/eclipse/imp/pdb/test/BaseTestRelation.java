@@ -24,7 +24,7 @@ import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
-import org.eclipse.imp.pdb.facts.type.RelationType;
+import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestRelation extends TestCase {
@@ -97,6 +97,16 @@ public abstract class BaseTestRelation extends TestCase {
 		if (!vf.relation(tf.tupleType(tf.integerType())).isEmpty()) {
 			fail("this relation should be empty");
 		}
+		
+		IRelation emptyRel = vf.relation();
+		if (!emptyRel.isEmpty()) {
+			fail("empty relation is not empty?");
+		}
+		if (!emptyRel.getType().isRelationType()) {
+			fail("empty relation should have relation type");
+		}
+		
+		
 	}
 
 	public void testSize() {
@@ -294,7 +304,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty intersection failed");
 			}
 			
-			RelationType type = (RelationType) intersection.getType();
+			Type type = intersection.getType();
 			if (!type.getFieldType(0).isValueType()) {
 				fail("intersection should produce lub types");
 			}
@@ -339,7 +349,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty intersection failed");
 			}
 			
-			RelationType type = (RelationType) intersection.getType();
+			Type type = intersection.getType();
 			if (!type.getFieldType(0).isValueType()) {
 				fail("intersection should produce lub types");
 			}
@@ -459,7 +469,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty union failed");
 			}
 			
-			RelationType type = (RelationType) union.getType();
+			Type type = union.getType();
 			if (!type.getFieldType(0).isValueType()) {
 				fail("union should produce lub types");
 			}
@@ -505,7 +515,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty union failed");
 			}
 			
-			RelationType type = (RelationType) union.getType();
+			Type type = union.getType();
 			if (!type.getFieldType(0).isValueType()) {
 				fail("union should produce lub types");
 			}

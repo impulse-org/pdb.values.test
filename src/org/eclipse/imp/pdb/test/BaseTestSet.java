@@ -88,6 +88,16 @@ public abstract class BaseTestSet extends TestCase {
 		}
 	}
 
+	public void testEmpty() {
+		ISet emptySet = vf.set();
+		if (!emptySet.isEmpty()) {
+			fail("empty set is not empty?");
+		}
+		
+		if (!emptySet.getType().isRelationType()) {
+			fail("empty set should have relation type (yes really!)");
+		}
+	}
 	public void testContains() {
 		ISet set1 = vf.set(integers[0], integers[1]);
 		
