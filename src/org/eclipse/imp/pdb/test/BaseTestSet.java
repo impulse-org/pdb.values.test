@@ -75,7 +75,7 @@ public abstract class BaseTestSet extends TestCase {
 			}
 			
 		} catch (FactTypeError e1) {
-			fail("type checking error");
+			fail("type checking error:" + e1);
 		}
 		
 		ISetWriter numberSet = vf.setWriter(tf.valueType());
@@ -84,7 +84,7 @@ public abstract class BaseTestSet extends TestCase {
 			numberSet.insert(integers[0]);
 			numberSet.insert(doubles[0]);
 		} catch (FactTypeError e) {
-			fail("should be able to insert subtypes");
+			fail("should be able to insert subtypes:" + e);
 		}
 	}
 
