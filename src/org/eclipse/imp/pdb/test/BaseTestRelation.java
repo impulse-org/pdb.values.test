@@ -464,7 +464,7 @@ public abstract class BaseTestRelation extends TestCase {
 		IRelation empty2 = vf.relation(tf.tupleType(tf.doubleType()));
 		
 		try {
-			final IRelation union = empty1.intersect(empty2);
+			final IRelation union = empty1.union(empty2);
 			if (!union.isEmpty()) {
 				fail("empty union failed");
 			}
@@ -510,7 +510,7 @@ public abstract class BaseTestRelation extends TestCase {
 		ISet empty2 = vf.set(tf.tupleType(tf.doubleType()));
 		
 		try {
-			final IRelation union = empty1.intersect(empty2);
+			final IRelation union = empty1.union(empty2);
 			if (!union.isEmpty()) {
 				fail("empty union failed");
 			}
