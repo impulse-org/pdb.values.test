@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.Type;
+import org.eclipse.imp.pdb.facts.type.TypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public class TestType extends TestCase {
@@ -98,6 +99,56 @@ public class TestType extends TestCase {
 			if (t.isRelationType() && !t.getElementType().isTupleType()) {
 				fail("Relations should contain tuples");
 			}
+		}
+	}
+	
+	public void testADT() {
+		Type E = ft.abstractDataType("E");
+		
+		if (E.isSubtypeOf(ft.nodeType())) {
+			fail("Abstract data-types may be composed of other things than tree nodes");
+		}
+		
+		if (!E.isSubtypeOf(ft.valueType())) {
+			fail("funny subtype of");
+		}
+		
+		Type i = ft.define(E, ft.integerType(), "i");
+		Type s = ft.define(E, ft.stringType(), "s");
+		
+		if (!ft.integerType().isSubtypeOf(E)) {
+			fail("ints should now be subtypes of E");
+		}
+		
+		if (!ft.stringType().isSubtypeOf(E)) {
+			fail("strings should now be subtypes of E");
+		}
+		
+		Type f = ft.constructor(E, "f", ft.integerType(), "i");
+		Type g = ft.constructor(E, "g", ft.integerType(), "j");
+		
+		if (!f.isSubtypeOf(E) || !g.isSubtypeOf(E)) {
+			fail("constructors are subtypes of the adt");
+		}
+		
+		if (f.isSubtypeOf(g) || g.isSubtypeOf(f)) {
+			fail("alternative constructors should be incomparable");
+		}
+		
+		if (!f.isSubtypeOf(ft.nodeType())) {
+			fail("A constructor should be a node");
+		}
+		
+		if (!g.isSubtypeOf(ft.nodeType())) {
+			fail("A constructor should be a node");
+		}
+		
+		try {
+			ft.define(E, ft.abstractDataType("F"), "f");
+			fail("nesting of ADT's should not be allowed");
+		}
+		catch (TypeDeclarationException e) {
+			// should happen
 		}
 	}
 
