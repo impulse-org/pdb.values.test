@@ -14,7 +14,7 @@ package org.eclipse.imp.pdb.test;
 
 import junit.framework.TestCase;
 
-import org.eclipse.imp.pdb.facts.ITree;
+import org.eclipse.imp.pdb.facts.INode;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.Type;
@@ -24,14 +24,14 @@ public abstract class BaseTestTree extends TestCase {
     private IValueFactory vf;
     private TypeFactory tf = TypeFactory.getInstance();
     
-    Type Boolean = tf.namedTreeType("Boolean");
+    Type Boolean = tf.abstractDataType("Boolean");
     Type BoolBinOp = tf.tupleType(Boolean, Boolean);
     Type BoolOp = tf.tupleType(Boolean);
-    Type True = tf.treeNodeType(Boolean, "true");
-    Type False = tf.treeNodeType(Boolean, "false");
-    Type And = tf.treeNodeType(Boolean, "and", BoolBinOp);
-    Type Or = tf.treeNodeType(Boolean, "and", BoolBinOp);
-    Type Not = tf.treeNodeType(Boolean, "not", BoolOp);
+    Type True = tf.constructor(Boolean, "true");
+    Type False = tf.constructor(Boolean, "false");
+    Type And = tf.constructor(Boolean, "and", BoolBinOp);
+    Type Or = tf.constructor(Boolean, "and", BoolBinOp);
+    Type Not = tf.constructor(Boolean, "not", BoolOp);
     
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();
@@ -40,11 +40,11 @@ public abstract class BaseTestTree extends TestCase {
 	}
 
 	public void testImmutability() {
-		ITree test = genAndTree(2);
-		ITree ref = test;
+		INode test = genAndTree(2);
+		INode ref = test;
 		
 		// do a modification
-		test.set(0, vf.tree(False, new IValue[0]));
+		test.set(0, vf.constructor(False, new IValue[0]));
 		
 		if (!ref.equals(test)) {
 			fail("set modified a tree, which should be immutable");
@@ -52,10 +52,10 @@ public abstract class BaseTestTree extends TestCase {
 	}
 	
 	public void testSet() {
-        ITree test1 = genAndTree(5);
-		ITree test2 = genAndTree(2);
-		ITree refTest2 = genAndTree(2);
-		ITree test3 = test2.set(0, test1);
+        INode test1 = genAndTree(5);
+		INode test2 = genAndTree(2);
+		INode refTest2 = genAndTree(2);
+		INode test3 = test2.set(0, test1);
 		
 		if (test2.equals(test3)) {
 			fail("set did not have an effect");
@@ -67,21 +67,21 @@ public abstract class BaseTestTree extends TestCase {
 	}
 	
 	public void testEquality() {
-		ITree test1 = genAndTree(2);
-		ITree test2 = genAndTree(2);
+		INode test1 = genAndTree(2);
+		INode test2 = genAndTree(2);
 		
 		if (!test1.equals(test2)) {
 			fail("trees should be equal");
 		}
 	}
 	
-	public ITree genAndTree(int depth) {
+	public INode genAndTree(int depth) {
 		if (depth == 0) {
-			return vf.tree(True, new IValue[0]);
+			return vf.constructor(True, new IValue[0]);
 		}
 		else {
-			ITree child = genAndTree(depth - 1);
-			return vf.tree(And, new IValue[] { child, child });
+			INode child = genAndTree(depth - 1);
+			return vf.constructor(And, new IValue[] { child, child });
 		}
 	}
 }

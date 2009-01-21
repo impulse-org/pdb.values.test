@@ -62,7 +62,7 @@ public class TestType extends TestCase {
 			newTypes.add(ft.tupleType(t1));
 			newTypes.add(ft.relType(t1));
 			newTypes.add(ft.setType(t1));
-			newTypes.add(ft.namedType("type_" + allTypes.size() + newTypes.size(), t1));
+			newTypes.add(ft.aliasType("type_" + allTypes.size() + newTypes.size(), t1));
 			int max2 = COMBINATION_UPPERBOUND;
 			
 			for (Type t2 : allTypes) {

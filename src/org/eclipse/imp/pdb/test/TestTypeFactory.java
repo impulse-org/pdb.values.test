@@ -207,11 +207,11 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeType() {
 		try {
-			Type namedType = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			Type namedType = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be Type
 			Type type = ft.relTypeFromTuple(namedType);
 		
-			Type namedType2 = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			Type namedType2 = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relTypeFromTuple(namedType2)) {
 				fail("relation types should be canonical");
@@ -228,11 +228,11 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeNamedType() {
 		try {
-			Type namedType = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
-			// note that the declared type of namedType needs to be NamedType
+			Type namedType = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			// note that the declared type of namedType needs to be AliasType
 			Type type = ft.relTypeFromTuple(namedType);
 		
-			Type namedType2 = ft.namedType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			Type namedType2 = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relTypeFromTuple(namedType2)) {
 				fail("relation types should be canonical");
@@ -324,15 +324,15 @@ public class TestTypeFactory extends TestCase {
 
 	public void testNamedType() {
 		try {
-			Type t1 = ft.namedType("myType", ft.integerType());
-			Type t2 = ft.namedType("myType", ft.integerType());
+			Type t1 = ft.aliasType("myType", ft.integerType());
+			Type t2 = ft.aliasType("myType", ft.integerType());
 
 			if (t1 != t2) {
 				fail("named types should be canonical");
 			}
 
 			try {
-				ft.namedType("myType", ft.doubleType());
+				ft.aliasType("myType", ft.doubleType());
 				fail("Should not be allowed to redeclare a type name");
 			} catch (TypeDeclarationException e) {
 				// this should happen

@@ -14,7 +14,7 @@ package org.eclipse.imp.pdb.test;
 
 import junit.framework.TestCase;
 
-import org.eclipse.imp.pdb.facts.INode;
+import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.FactTypeError;
@@ -31,8 +31,8 @@ public abstract class BaseTestAnnotations extends TestCase {
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();
 		vf = factory;
-		E = tf.namedTreeType("E");
-		N = tf.treeNodeType(E, "n", tf.integerType());
+		E = tf.abstractDataType("E");
+		N = tf.constructor(E, "n", tf.integerType());
 	}
 	
 	public void testDeclarationOnNonAllowedType() {
@@ -71,7 +71,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 	}
 	
 	public void testSetAnnotation() {
-		INode n = (INode) N.make(vf, vf.integer(0));
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		tf.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
@@ -94,7 +94,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 	}
 	
 	public void testGetAnnotation() {
-		INode n = (INode) N.make(vf, vf.integer(0));
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		tf.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
@@ -113,7 +113,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			fail(e.toString());
 		}
 		
-		INode m = n.setAnnotation("size", vf.integer(1));
+		IConstructor m = n.setAnnotation("size", vf.integer(1));
 		IValue b = m.getAnnotation("size");
 		if (!b.equals(vf.integer(1))) {
 			fail();
@@ -121,10 +121,10 @@ public abstract class BaseTestAnnotations extends TestCase {
 	}
 	
 	public void testImmutability() {
-		INode n = (INode) N.make(vf, vf.integer(0));
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		tf.declareAnnotation(E, "size", tf.integerType());
 		
-		INode m = n.setAnnotation("size", vf.integer(1));
+		IConstructor m = n.setAnnotation("size", vf.integer(1));
 		
 		if (m == n) {
 			fail("annotation setting should change object identity");
@@ -136,7 +136,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 	}
 	
 	public void testDeclaresAnnotation() {
-		INode n = (INode) N.make(vf, vf.integer(0));
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		tf.declareAnnotation(E, "size", tf.integerType());
 		
 		if (!n.declaresAnnotation("size")) {
@@ -148,7 +148,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 		}
 	}
 	public void testHasAnnotation() {
-		INode n = (INode) N.make(vf, vf.integer(0));
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		tf.declareAnnotation(E, "size", tf.integerType());
 		
 		try {

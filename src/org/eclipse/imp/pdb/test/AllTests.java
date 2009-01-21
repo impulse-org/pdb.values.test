@@ -12,14 +12,14 @@
 
 package org.eclipse.imp.pdb.test;
 
-import org.eclipse.imp.pdb.test.hash.TestList;
-import org.eclipse.imp.pdb.test.hash.TestRelation;
-import org.eclipse.imp.pdb.test.hash.TestSet;
-import org.eclipse.imp.pdb.test.hash.TestValueFactory;
-import org.eclipse.imp.pdb.test.reference.TestAnnotations;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import org.eclipse.imp.pdb.test.reference.TestAnnotations;
+import org.eclipse.imp.pdb.test.reference.TestList;
+import org.eclipse.imp.pdb.test.reference.TestRelation;
+import org.eclipse.imp.pdb.test.reference.TestSet;
+import org.eclipse.imp.pdb.test.reference.TestValueFactory;
 
 public class AllTests {
 
