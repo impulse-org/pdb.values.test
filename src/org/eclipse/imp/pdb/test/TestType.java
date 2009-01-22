@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2007 IBM Corporation.
+* Copyright (c) 2007 IBM Corporation, 2008 CWI
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License v1.0
 * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
 *
 * Contributors:
 *    Robert Fuhrer (rfuhrer@watson.ibm.com) - initial API and implementation
+*    Jurgen Vinju (jurgen@vinju.org)
 
 *******************************************************************************/
 
@@ -134,6 +135,16 @@ public class TestType extends TestCase {
 		
 		Type f = ft.constructor(E, "f", ft.integerType(), "i");
 		Type g = ft.constructor(E, "g", ft.integerType(), "j");
+
+		Type a = ft.aliasType("a", ft.integerType());
+		
+		if (f.isSubtypeOf(ft.integerType()) || f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a)) {
+			fail("funny");
+		}
+		
+		if (g.isSubtypeOf(ft.integerType()) || g.isSubtypeOf(ft.stringType()) || g.isSubtypeOf(a)) {
+			fail("funny");
+		}
 		
 		if (!f.isSubtypeOf(E) || !g.isSubtypeOf(E)) {
 			fail("constructors are subtypes of the adt");
@@ -158,6 +169,7 @@ public class TestType extends TestCase {
 		catch (TypeDeclarationException e) {
 			// should happen
 		}
+		
 	}
 
 	public void testIsSubtypeOf() {
