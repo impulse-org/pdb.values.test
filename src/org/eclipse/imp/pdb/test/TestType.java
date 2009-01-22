@@ -115,6 +115,14 @@ public class TestType extends TestCase {
 		
 		Type i = ft.define(E, ft.integerType(), "i");
 		Type s = ft.define(E, ft.stringType(), "s");
+
+		if (i != E || s != E) {
+			fail("define should simply return the adt type");
+		}
+		
+		if (i.isSubtypeOf(ft.nodeType()) || s.isSubtypeOf(ft.nodeType())) {
+			fail("anonymous extensions should not be nodes");
+		}
 		
 		if (!ft.integerType().isSubtypeOf(E)) {
 			fail("ints should now be subtypes of E");
