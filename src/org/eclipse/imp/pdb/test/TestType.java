@@ -103,6 +103,40 @@ public class TestType extends TestCase {
 		}
 	}
 	
+	public void testParameterizedAlias() {
+		Type T = ft.parameterType("T");
+		// DiGraph[&T] = rel[&T from ,&T to]
+		Type DiGraph = ft.aliasType("DiGraph", ft.relType(T, "from", T, "to"), T); 
+		Type IntInstance = ft.relType(ft.integerType(), ft.integerType());
+		Type ValueInstance = ft.relType(ft.valueType(), ft.valueType());
+		
+		// before instantiation, the parameterized type rel[&T, &T] is a sub-type of rel[value, value]
+		assertTrue(IntInstance.isSubtypeOf(DiGraph));
+		assertFalse(DiGraph.isSubtypeOf(IntInstance));
+		assertTrue(DiGraph.isSubtypeOf(ValueInstance));
+		
+		Map<Type,Type> bindings = new HashMap<Type,Type>();
+		DiGraph.match(IntInstance, bindings);
+		assertTrue(bindings.get(T) == ft.integerType());
+		
+		// after instantiation, the parameterized type is an alias for rel[int, int]
+		Type ComputedInstance = DiGraph.instantiate(bindings); // DiGraph[int]
+		assertTrue(ComputedInstance.equivalent(IntInstance));
+		assertFalse(ValueInstance.isSubtypeOf(ComputedInstance));
+		
+		// and sub-typing remains co-variant:
+		assertTrue(IntInstance.isSubtypeOf(ValueInstance));
+		assertTrue(ComputedInstance.isSubtypeOf(ValueInstance));
+		
+		try {
+			ft.aliasType("DiGraph", ft.setType(T), T);
+			fail("should not be able to redefine alias");
+		}
+		catch (TypeDeclarationException e) {
+			// this should happen
+		}
+	}
+	
 	public void testADT() {
 		Type E = ft.abstractDataType("E");
 		
