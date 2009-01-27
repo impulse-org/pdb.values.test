@@ -106,61 +106,41 @@ public class TestType extends TestCase {
 	public void testADT() {
 		Type E = ft.abstractDataType("E");
 		
-		if (E.isSubtypeOf(ft.nodeType())) {
-			fail("Abstract data-types may be composed of other things than tree nodes");
-		}
+		assertFalse("Abstract data-types may be composed of other things than tree nodes",
+				E.isSubtypeOf(ft.nodeType()));
 		
-		if (!E.isSubtypeOf(ft.valueType())) {
-			fail("funny subtype of");
-		}
+		assertTrue(E.isSubtypeOf(ft.valueType()));
 		
 		Type i = ft.define(E, ft.integerType(), "i");
 		Type s = ft.define(E, ft.stringType(), "s");
 
-		if (i != E || s != E) {
-			fail("define should simply return the adt type");
-		}
+		assertFalse("define should simply return the adt type", 
+				i != E || s != E);
 		
-		if (i.isSubtypeOf(ft.nodeType()) || s.isSubtypeOf(ft.nodeType())) {
-			fail("anonymous extensions should not be nodes");
-		}
+		assertFalse("anonymous extensions should not be nodes", 
+				i.isSubtypeOf(ft.nodeType()) || s.isSubtypeOf(ft.nodeType()));
 		
-		if (!ft.integerType().isSubtypeOf(E)) {
-			fail("ints should now be subtypes of E");
-		}
+		assertTrue("ints should now be subtypes of E", ft.integerType().isSubtypeOf(E));
+		assertTrue("strings should now be subtypes of E", ft.stringType().isSubtypeOf(E));
 		
-		if (!ft.stringType().isSubtypeOf(E)) {
-			fail("strings should now be subtypes of E");
-		}
+		assertTrue("lub of two anonymous types should skip adt", 
+				ft.integerType().lub(ft.stringType()) == ft.valueType());
+		assertTrue(ft.integerType().lub(E) == E);
+		assertTrue(E.lub(ft.integerType()) == E);
 		
 		Type f = ft.constructor(E, "f", ft.integerType(), "i");
 		Type g = ft.constructor(E, "g", ft.integerType(), "j");
 
 		Type a = ft.aliasType("a", ft.integerType());
 		
-		if (f.isSubtypeOf(ft.integerType()) || f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a)) {
-			fail("funny");
-		}
+		assertFalse(f.isSubtypeOf(ft.integerType()) || f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a));
+		assertFalse(g.isSubtypeOf(ft.integerType()) || g.isSubtypeOf(ft.stringType()) || g.isSubtypeOf(a));
+		assertFalse("constructors are subtypes of the adt", !f.isSubtypeOf(E) || !g.isSubtypeOf(E));
 		
-		if (g.isSubtypeOf(ft.integerType()) || g.isSubtypeOf(ft.stringType()) || g.isSubtypeOf(a)) {
-			fail("funny");
-		}
+		assertFalse ("alternative constructors should be incomparable", f.isSubtypeOf(g) || g.isSubtypeOf(f));
 		
-		if (!f.isSubtypeOf(E) || !g.isSubtypeOf(E)) {
-			fail("constructors are subtypes of the adt");
-		}
-		
-		if (f.isSubtypeOf(g) || g.isSubtypeOf(f)) {
-			fail("alternative constructors should be incomparable");
-		}
-		
-		if (!f.isSubtypeOf(ft.nodeType())) {
-			fail("A constructor should be a node");
-		}
-		
-		if (!g.isSubtypeOf(ft.nodeType())) {
-			fail("A constructor should be a node");
-		}
+		assertTrue("A constructor should be a node", f.isSubtypeOf(ft.nodeType()));
+		assertTrue("A constructor should be a node", g.isSubtypeOf(ft.nodeType()));
 		
 		try {
 			ft.define(E, ft.abstractDataType("F"), "f");
