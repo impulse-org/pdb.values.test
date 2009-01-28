@@ -103,7 +103,7 @@ public class TestIO extends TestCase {
 				IValue result = testReader.read(vf, Boolean, new ByteArrayInputStream(testXML[i].getBytes()));
 				System.err.println(testXML[i] + " -> " + result);
 				
-				if (!result.equals(testValues[i])) {
+				if (!result.isEqual(testValues[i])) {
 					fail(testXML[i] + " did not parse correctly: " + result + " != " + testValues[i]);
 				}
 			}

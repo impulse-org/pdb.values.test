@@ -279,7 +279,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		ISourceRange range = ff.sourceRange(1, 2, 3, 4, 5, 6);
 		ISourceLocation sl = ff.sourceLocation("/dev/null", range);
 		if (!sl.getPath().equals("/dev/null") ||
-				!sl.getRange().equals(range)) {
+				!sl.getRange().isEqual(range)) {
 			fail("source location creation is weird");
 		}
 	}

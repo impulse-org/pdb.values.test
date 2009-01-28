@@ -46,7 +46,7 @@ public abstract class BaseTestTree extends TestCase {
 		// do a modification
 		test.set(0, vf.constructor(False, new IValue[0]));
 		
-		if (!ref.equals(test)) {
+		if (!ref.isEqual(test)) {
 			fail("set modified a tree, which should be immutable");
 		}
 	}
@@ -57,11 +57,11 @@ public abstract class BaseTestTree extends TestCase {
 		INode refTest2 = genAndTree(2);
 		INode test3 = test2.set(0, test1);
 		
-		if (test2.equals(test3)) {
+		if (test2.isEqual(test3)) {
 			fail("set did not have an effect");
 		}
 		
-		if (!refTest2.equals(test2)) {
+		if (!refTest2.isEqual(test2)) {
 			fail("set changed immutable tree");
 		}
 	}
@@ -70,7 +70,7 @@ public abstract class BaseTestTree extends TestCase {
 		INode test1 = genAndTree(2);
 		INode test2 = genAndTree(2);
 		
-		if (!test1.equals(test2)) {
+		if (!test1.isEqual(test2)) {
 			fail("trees should be equal");
 		}
 	}

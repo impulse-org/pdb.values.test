@@ -115,7 +115,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 		
 		IConstructor m = n.setAnnotation("size", vf.integer(1));
 		IValue b = m.getAnnotation("size");
-		if (!b.equals(vf.integer(1))) {
+		if (!b.isEqual(vf.integer(1))) {
 			fail();
 		}
 	}
@@ -130,7 +130,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			fail("annotation setting should change object identity");
 		}
 		
-		if (m.equals(n)) {
+		if (m.isEqual(n)) {
 			fail("setting an annotation should change equality");
 		}
 	}

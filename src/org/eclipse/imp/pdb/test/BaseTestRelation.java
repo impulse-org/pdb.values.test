@@ -147,7 +147,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testClosure() {
 		try {
-			if (!integerRelation.closure().equals(integerRelation)) {
+			if (!integerRelation.closure().isEqual(integerRelation)) {
 				fail("closure adds extra tuples?");
 			}
 		} catch (FactTypeError e) {
@@ -246,7 +246,7 @@ public abstract class BaseTestRelation extends TestCase {
 			
 			IRelation comp = rel1.compose(rel2);
 			
-			if (!comp.equals(rel3)) {
+			if (!comp.isEqual(rel3)) {
 				fail("composition does not produce expected result");
 			}
 		} catch (FactTypeError e) {
@@ -270,7 +270,7 @@ public abstract class BaseTestRelation extends TestCase {
 		try {
 			IRelation rel = integerRelation.insert(vf.tuple(vf.integer(0),vf.integer(0)));
 			
-			if (!rel.equals(integerRelation)) {
+			if (!rel.isEqual(integerRelation)) {
 				fail("insert into a relation of an existing tuple should not change the relation");
 			}
 			
@@ -323,10 +323,10 @@ public abstract class BaseTestRelation extends TestCase {
 					integerTuples[3], integerTuples[4]);
 			IRelation result = vf.relation(integerTuples[2]);
 
-			if (!oneTwoThree.intersect(threeFourFive).equals(result)) {
+			if (!oneTwoThree.intersect(threeFourFive).isEqual(result)) {
 				fail("intersection failed");
 			}
-			if (!threeFourFive.intersect(oneTwoThree).equals(result)) {
+			if (!threeFourFive.intersect(oneTwoThree).isEqual(result)) {
 				fail("intersection should be commutative");
 			}
 			
@@ -368,10 +368,10 @@ public abstract class BaseTestRelation extends TestCase {
 					integerTuples[3], integerTuples[4]);
 			IRelation result = vf.relation(integerTuples[2]);
 
-			if (!oneTwoThree.intersect(threeFourFive).equals(result)) {
+			if (!oneTwoThree.intersect(threeFourFive).isEqual(result)) {
 				fail("intersection failed");
 			}
-			if (!threeFourFive.intersect(oneTwoThree).equals(result)) {
+			if (!threeFourFive.intersect(oneTwoThree).isEqual(result)) {
 				fail("intersection should be commutative");
 			}
 			
@@ -407,10 +407,10 @@ public abstract class BaseTestRelation extends TestCase {
 			IRelation result1 = vf.relation(integerTuples[0],integerTuples[1]);
 			IRelation result2 = vf.relation(integerTuples[3],integerTuples[4]);
 
-			if (!oneTwoThree.subtract(threeFourFive).equals(result1)) {
+			if (!oneTwoThree.subtract(threeFourFive).isEqual(result1)) {
 				fail("subtraction failed");
 			}
-			if (!threeFourFive.subtract(oneTwoThree).equals(result2)) {
+			if (!threeFourFive.subtract(oneTwoThree).isEqual(result2)) {
 				fail("subtraction failed");
 			}
 			
@@ -445,7 +445,7 @@ public abstract class BaseTestRelation extends TestCase {
 					integerTuples[3], integerTuples[4]);
 			IRelation result1 = vf.relation(integerTuples[0],integerTuples[1]);
 
-			if (!oneTwoThree.subtract(threeFourFive).equals(result1)) {
+			if (!oneTwoThree.subtract(threeFourFive).isEqual(result1)) {
 				fail("subtraction failed");
 			}
 			
@@ -489,14 +489,14 @@ public abstract class BaseTestRelation extends TestCase {
 			IRelation result = vf.relation(integerTuples[0],
 					integerTuples[1], integerTuples[2], integerTuples[3], integerTuples[4]);
 
-			if (!oneTwoThree.union(threeFourFive).equals(result)) {
+			if (!oneTwoThree.union(threeFourFive).isEqual(result)) {
 				fail("union failed");
 			}
-			if (!threeFourFive.union(oneTwoThree).equals(result)) {
+			if (!threeFourFive.union(oneTwoThree).isEqual(result)) {
 				fail("union should be commutative");
 			}
 			
-			if (!oneTwoThree.union(vf.relation(tf.tupleType(tf.integerType(),tf.integerType()))).equals(oneTwoThree)) {
+			if (!oneTwoThree.union(vf.relation(tf.tupleType(tf.integerType(),tf.integerType()))).isEqual(oneTwoThree)) {
 				fail("union with empty set should produce same set");
 			}
 
@@ -535,14 +535,14 @@ public abstract class BaseTestRelation extends TestCase {
 			IRelation result = vf.relation(integerTuples[0],
 					integerTuples[1], integerTuples[2], integerTuples[3], integerTuples[4]);
 
-			if (!oneTwoThree.union(threeFourFive).equals(result)) {
+			if (!oneTwoThree.union(threeFourFive).isEqual(result)) {
 				fail("union failed");
 			}
-			if (!threeFourFive.union(oneTwoThree).equals(result)) {
+			if (!threeFourFive.union(oneTwoThree).isEqual(result)) {
 				fail("union should be commutative");
 			}
 			
-			if (!oneTwoThree.union(vf.set(tf.tupleType(tf.integerType(),tf.integerType()))).equals(oneTwoThree)) {
+			if (!oneTwoThree.union(vf.set(tf.tupleType(tf.integerType(),tf.integerType()))).isEqual(oneTwoThree)) {
 				fail("union with empty set should produce same set");
 			}
 
@@ -575,7 +575,7 @@ public abstract class BaseTestRelation extends TestCase {
 	public void testCarrier() {
 		ISet carrier = integerRelation.carrier();
 		
-		if (!carrier.equals(setOfIntegers)) {
+		if (!carrier.isEqual(setOfIntegers)) {
 			fail("carrier should be equal to this set");
 		}
 	

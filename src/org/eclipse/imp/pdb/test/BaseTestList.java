@@ -73,7 +73,7 @@ public abstract class BaseTestList extends TestCase {
 				fail("append failed");
 			}
 			
-			if (!longer.get(integerList.length()).equals(newValue)) {
+			if (!longer.get(integerList.length()).isEqual(newValue)) {
 				fail("element was not appended");
 			}
 			
@@ -92,7 +92,7 @@ public abstract class BaseTestList extends TestCase {
 
 	public void testGet() {
 		for (int i = 0; i < integers.length; i++) {
-			if (!integerList.get(i).equals(integers[i])) {
+			if (!integerList.get(i).isEqual(integers[i])) {
 				fail("get failed");
 			}
 		}
@@ -107,7 +107,7 @@ public abstract class BaseTestList extends TestCase {
 				fail("append failed");
 			}
 			
-			if (!longer.get(0).equals(newValue)) {
+			if (!longer.get(0).isEqual(newValue)) {
 				fail("element was not insrrted");
 			}
 			
@@ -146,7 +146,7 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		for (int i = 0; i < integers.length; i++) {
-			if (!reverse.get(i).equals(integers[integers.length - i - 1])) {
+			if (!reverse.get(i).isEqual(integers[integers.length - i - 1])) {
 				fail("reverse did something funny: " + reverse + " is not reverse of " + integerList);
 			}
 		}
@@ -158,7 +158,7 @@ public abstract class BaseTestList extends TestCase {
 		int i;
 		for (i = 0; it.hasNext(); i++) {
 			IValue v = it.next();
-			if (!v.equals(integers[i])) {
+			if (!v.isEqual(integers[i])) {
 				fail("iterator does not iterate in order");
 			}
 		}
