@@ -1,15 +1,15 @@
 /*******************************************************************************
-* Copyright (c) 2007 IBM Corporation, 2008 CWI
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-*    Robert Fuhrer (rfuhrer@watson.ibm.com) - initial API and implementation
-*    Jurgen Vinju (jurgen@vinju.org)
+ * Copyright (c) 2007 IBM Corporation, 2008 CWI
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Robert Fuhrer (rfuhrer@watson.ibm.com) - initial API and implementation
+ *    Jurgen Vinju (jurgen@vinju.org)
 
-*******************************************************************************/
+ *******************************************************************************/
 
 package org.eclipse.imp.pdb.test;
 
@@ -31,8 +31,8 @@ public class TestType extends TestCase {
 	private static TypeFactory ft = TypeFactory.getInstance();
 
 	private static List<Type> basic = new LinkedList<Type>();
-    private static List<Type> allTypes = new LinkedList<Type>();
-    
+	private static List<Type> allTypes = new LinkedList<Type>();
+
 	static {
 		try {
 			basic.add(ft.integerType());
@@ -51,7 +51,7 @@ public class TestType extends TestCase {
 			throw new RuntimeException("fact type error in setup", e);
 		}
 	}
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 	}
@@ -59,19 +59,20 @@ public class TestType extends TestCase {
 	private static void recombine() throws FactTypeError {
 		List<Type> newTypes = new LinkedList<Type>();
 		int max1 = COMBINATION_UPPERBOUND;
-		
+
 		for (Type t1 : allTypes) {
 			newTypes.add(ft.tupleType(t1));
 			newTypes.add(ft.relType(t1));
 			newTypes.add(ft.setType(t1));
-			newTypes.add(ft.aliasType("type_" + allTypes.size() + newTypes.size(), t1));
+			newTypes.add(ft.aliasType("type_" + allTypes.size()
+					+ newTypes.size(), t1));
 			int max2 = COMBINATION_UPPERBOUND;
-			
+
 			for (Type t2 : allTypes) {
 				newTypes.add(ft.tupleType(t1, t2));
 				newTypes.add(ft.relType(t1, t2));
 				int max3 = COMBINATION_UPPERBOUND;
-				
+
 				for (Type t3 : allTypes) {
 					newTypes.add(ft.tupleType(t1, t2, t3));
 					newTypes.add(ft.relType(t1, t2, t3));
@@ -83,18 +84,19 @@ public class TestType extends TestCase {
 					break;
 				}
 			}
-		
+
 			if (max1-- == 0) {
 				break;
 			}
 		}
-	
+
 		allTypes.addAll(newTypes);
 	}
-	
+
 	public void testRelations() {
 		for (Type t : allTypes) {
-			if (t.isSetType() && t.getElementType().isTupleType() && !t.isRelationType()) {
+			if (t.isSetType() && t.getElementType().isTupleType()
+					&& !t.isRelationType()) {
 				fail("Sets of tuples should be relations");
 			}
 			if (t.isRelationType() && !t.getElementType().isTupleType()) {
@@ -102,88 +104,124 @@ public class TestType extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testParameterizedAlias() {
 		Type T = ft.parameterType("T");
 		// DiGraph[&T] = rel[&T from ,&T to]
-		Type DiGraph = ft.aliasType("DiGraph", ft.relType(T, "from", T, "to"), T); 
+		Type DiGraph = ft.aliasType("DiGraph", ft.relType(T, "from", T, "to"),
+				T);
 		Type IntInstance = ft.relType(ft.integerType(), ft.integerType());
 		Type ValueInstance = ft.relType(ft.valueType(), ft.valueType());
-		
-		// before instantiation, the parameterized type rel[&T, &T] is a sub-type of rel[value, value]
+
+		// before instantiation, the parameterized type rel[&T, &T] is a
+		// sub-type of rel[value, value]
 		assertTrue(IntInstance.isSubtypeOf(DiGraph));
 		assertFalse(DiGraph.isSubtypeOf(IntInstance));
 		assertTrue(DiGraph.isSubtypeOf(ValueInstance));
-		
-		Map<Type,Type> bindings = new HashMap<Type,Type>();
+
+		Map<Type, Type> bindings = new HashMap<Type, Type>();
 		DiGraph.match(IntInstance, bindings);
 		assertTrue(bindings.get(T) == ft.integerType());
-		
-		// after instantiation, the parameterized type is an alias for rel[int, int]
+
+		// after instantiation, the parameterized type is an alias for rel[int,
+		// int]
 		Type ComputedInstance = DiGraph.instantiate(bindings); // DiGraph[int]
 		assertTrue(ComputedInstance.equivalent(IntInstance));
 		assertFalse(ValueInstance.isSubtypeOf(ComputedInstance));
-		
+
 		// and sub-typing remains co-variant:
 		assertTrue(IntInstance.isSubtypeOf(ValueInstance));
 		assertTrue(ComputedInstance.isSubtypeOf(ValueInstance));
-		
+
 		try {
 			ft.aliasType("DiGraph", ft.setType(T), T);
 			fail("should not be able to redefine alias");
-		}
-		catch (TypeDeclarationException e) {
+		} catch (TypeDeclarationException e) {
 			// this should happen
 		}
 	}
-	
+
 	public void testADT() {
 		Type E = ft.abstractDataType("E");
-		
-		assertFalse("Abstract data-types may be composed of other things than tree nodes",
-				E.isSubtypeOf(ft.nodeType()));
-		
-		assertTrue(E.isSubtypeOf(ft.valueType()));
-		
-		Type i = ft.define(E, ft.integerType(), "i");
-		Type s = ft.define(E, ft.stringType(), "s");
 
-		assertFalse("define should simply return the adt type", 
-				i != E || s != E);
-		
-		assertFalse("anonymous extensions should not be nodes", 
-				i.isSubtypeOf(ft.nodeType()) || s.isSubtypeOf(ft.nodeType()));
-		
-		assertTrue("ints should now be subtypes of E", ft.integerType().isSubtypeOf(E));
-		assertTrue("strings should now be subtypes of E", ft.stringType().isSubtypeOf(E));
-		
-		assertTrue("lub of two anonymous types should skip adt", 
-				ft.integerType().lub(ft.stringType()) == ft.valueType());
+		assertFalse(
+				"Abstract data-types may be composed of other things than tree nodes",
+				E.isSubtypeOf(ft.nodeType()));
+
+		assertTrue(E.isSubtypeOf(ft.valueType()));
+
+		Type i = ft.extendAbstractDataType(E, ft.integerType(), "i");
+
+		try {
+			ft.extendAbstractDataType(E, ft.stringType(), "s");
+			fail("should not be able to extend twice");
+		} catch (TypeDeclarationException e) {
+
+		}
+
+		assertFalse("extend should simply return the adt type", i != E);
+
+		assertFalse("anonymous extensions should not be nodes", i
+				.isSubtypeOf(ft.nodeType()));
+
+		assertTrue("ints should now be subtypes of E", ft.integerType()
+				.isSubtypeOf(E));
+
+		assertTrue("lub of two anonymous types should skip adt", ft
+				.integerType().lub(ft.stringType()) == ft.valueType());
 		assertTrue(ft.integerType().lub(E) == E);
 		assertTrue(E.lub(ft.integerType()) == E);
-		
+
 		Type f = ft.constructor(E, "f", ft.integerType(), "i");
 		Type g = ft.constructor(E, "g", ft.integerType(), "j");
 
 		Type a = ft.aliasType("a", ft.integerType());
-		
-		assertFalse(f.isSubtypeOf(ft.integerType()) || f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a));
-		assertFalse(g.isSubtypeOf(ft.integerType()) || g.isSubtypeOf(ft.stringType()) || g.isSubtypeOf(a));
-		assertFalse("constructors are subtypes of the adt", !f.isSubtypeOf(E) || !g.isSubtypeOf(E));
-		
-		assertFalse ("alternative constructors should be incomparable", f.isSubtypeOf(g) || g.isSubtypeOf(f));
-		
-		assertTrue("A constructor should be a node", f.isSubtypeOf(ft.nodeType()));
-		assertTrue("A constructor should be a node", g.isSubtypeOf(ft.nodeType()));
+
+		assertFalse(f.isSubtypeOf(ft.integerType())
+				|| f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a));
+		assertFalse(g.isSubtypeOf(ft.integerType())
+				|| g.isSubtypeOf(ft.stringType()) || g.isSubtypeOf(a));
+		assertFalse("constructors are subtypes of the adt", !f.isSubtypeOf(E)
+				|| !g.isSubtypeOf(E));
+
+		assertFalse("alternative constructors should be incomparable", f
+				.isSubtypeOf(g)
+				|| g.isSubtypeOf(f));
+
+		assertTrue("A constructor should be a node", f.isSubtypeOf(ft
+				.nodeType()));
+		assertTrue("A constructor should be a node", g.isSubtypeOf(ft
+				.nodeType()));
+
+		Type F = ft.abstractDataType("F");
 		
 		try {
-			ft.define(E, ft.abstractDataType("F"), "f");
+			ft.extendAbstractDataType(E, F, "f");
 			fail("nesting of ADT's should not be allowed");
+		} catch (TypeDeclarationException e) {
+			// should happen
+		}
+		
+		ft.extendAbstractDataType(F, E, "e");
+		assertTrue(E.isSubtypeOf(F));
+		try {
+			ft.constructor(F, "f", ft.integerType(), "k");
+			fail("should not be able to introduce overlapping constructor after extending");
 		}
 		catch (TypeDeclarationException e) {
 			// should happen
 		}
 		
+		Type G = ft.abstractDataType("G");
+		ft.constructor(G, "f", ft.integerType(), "i");
+		try {
+			ft.extendAbstractDataType(G, E, "z");
+			fail("should not allowed to introduce overlapping constructors");
+		}
+		catch (TypeDeclarationException e) {
+			// should happen
+		}
+
 	}
 
 	public void testIsSubtypeOf() {
@@ -191,24 +229,26 @@ public class TestType extends TestCase {
 			if (!t.isSubtypeOf(t)) {
 				fail("any type should be a subtype of itself: " + t);
 			}
-			
-			if (t.isSetType() && t.getElementType().isTupleType() && !t.isRelationType()) {
+
+			if (t.isSetType() && t.getElementType().isTupleType()
+					&& !t.isRelationType()) {
 				fail("Sets of tuples should be relations");
 			}
 		}
-		
+
 		for (Type t1 : allTypes) {
 			for (Type t2 : allTypes) {
 				if (t1 != t2 && t1.isSubtypeOf(t2) && t2.isSubtypeOf(t1)) {
 					if (!t1.isAliasType() && !t2.isAliasType()) {
 						System.err.println("Failure:");
-						System.err.println(t1 + " <= " + t2 + " && " + t2 + " <= " + t1);
+						System.err.println(t1 + " <= " + t2 + " && " + t2
+								+ " <= " + t1);
 						fail("subtype of should not be symmetric");
 					}
 				}
 			}
 		}
-		
+
 		for (Type t1 : allTypes) {
 			for (Type t2 : allTypes) {
 				if (t1.isSubtypeOf(t2)) {
@@ -216,7 +256,8 @@ public class TestType extends TestCase {
 						if (t2.isSubtypeOf(t3)) {
 							if (!t1.isSubtypeOf(t3)) {
 								System.err.println("FAILURE");
-								System.err.println("\t" + t1 + " <= " + t2 + " <= " + t3);
+								System.err.println("\t" + t1 + " <= " + t2
+										+ " <= " + t3);
 								System.err.println("\t" + t1 + " !<= " + t3);
 								fail("subtype should be transitive");
 							}
@@ -233,13 +274,12 @@ public class TestType extends TestCase {
 				fail("lub should be idempotent: " + t + " != " + t.lub(t));
 			}
 		}
-		
+
 		for (Type t1 : allTypes) {
 			for (Type t2 : allTypes) {
 				Type lub1 = t1.lub(t2);
 				Type lub2 = t2.lub(t1);
-				
-				
+
 				if (lub1 != lub2) {
 					System.err.println("Failure:");
 					System.err.println(t1 + ".lub(" + t2 + ") = " + lub1);
@@ -250,17 +290,20 @@ public class TestType extends TestCase {
 		}
 	}
 
-	
 	public void testGetTypeDescriptor() {
 		int count = 0;
 		for (Type t1 : allTypes) {
 			for (Type t2 : allTypes) {
 				if (t1.toString().equals(t2.toString())) {
 					if (t1 != t2) {
-						System.err.println("Type descriptors should be canonical:" + t1.toString() + " == " + t2.toString());
+						System.err
+								.println("Type descriptors should be canonical:"
+										+ t1.toString()
+										+ " == "
+										+ t2.toString());
 					}
 				}
-				if (count ++ > 10000) {
+				if (count++ > 10000) {
 					return;
 				}
 			}
@@ -270,44 +313,44 @@ public class TestType extends TestCase {
 	public void testMatchAndInstantiate() {
 		Type X = ft.parameterType("X");
 		Map<Type, Type> bindings = new HashMap<Type, Type>();
-		
+
 		Type subject = ft.integerType();
 		X.match(subject, bindings);
-		
+
 		if (!bindings.get(X).equals(subject)) {
 			fail("simple match failed");
 		}
-		
+
 		if (!X.instantiate(bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
-		
+
 		Type relXX = ft.relType(X, X);
 		bindings.clear();
 		subject = ft.relType(ft.integerType(), ft.integerType());
 		relXX.match(subject, bindings);
-		
+
 		if (!bindings.get(X).equals(ft.integerType())) {
 			fail("relation match failed");
 		}
-		
+
 		if (!relXX.instantiate(bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
-		
+
 		bindings.clear();
 		subject = ft.relType(ft.integerType(), ft.doubleType());
 		relXX.match(subject, bindings);
-		
+
 		Type lub = ft.integerType().lub(ft.doubleType());
 		if (!bindings.get(X).equals(lub)) {
 			fail("lubbing during matching failed");
 		}
-		
+
 		if (!relXX.instantiate(bindings).equals(ft.relType(lub, lub))) {
 			fail("instantiate failed");
 		}
 
 	}
-	
+
 }
