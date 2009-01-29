@@ -144,33 +144,11 @@ public class TestType extends TestCase {
 	public void testADT() {
 		Type E = ft.abstractDataType("E");
 
-		assertFalse(
-				"Abstract data-types may be composed of other things than tree nodes",
+		assertTrue(
+				"Abstract data-types are composed of constructors which are tree nodes",
 				E.isSubtypeOf(ft.nodeType()));
 
 		assertTrue(E.isSubtypeOf(ft.valueType()));
-
-		Type i = ft.extendAbstractDataType(E, ft.integerType(), "i");
-
-		try {
-			ft.extendAbstractDataType(E, ft.stringType(), "s");
-			fail("should not be able to extend twice");
-		} catch (TypeDeclarationException e) {
-
-		}
-
-		assertFalse("extend should simply return the adt type", i != E);
-
-		assertFalse("anonymous extensions should not be nodes", i
-				.isSubtypeOf(ft.nodeType()));
-
-		assertTrue("ints should now be subtypes of E", ft.integerType()
-				.isSubtypeOf(E));
-
-		assertTrue("lub of two anonymous types should skip adt", ft
-				.integerType().lub(ft.stringType()) == ft.valueType());
-		assertTrue(ft.integerType().lub(E) == E);
-		assertTrue(E.lub(ft.integerType()) == E);
 
 		Type f = ft.constructor(E, "f", ft.integerType(), "i");
 		Type g = ft.constructor(E, "g", ft.integerType(), "j");
@@ -192,36 +170,6 @@ public class TestType extends TestCase {
 				.nodeType()));
 		assertTrue("A constructor should be a node", g.isSubtypeOf(ft
 				.nodeType()));
-
-		Type F = ft.abstractDataType("F");
-		
-		try {
-			ft.extendAbstractDataType(E, F, "f");
-			fail("nesting of ADT's should not be allowed");
-		} catch (TypeDeclarationException e) {
-			// should happen
-		}
-		
-		ft.extendAbstractDataType(F, E, "e");
-		assertTrue(E.isSubtypeOf(F));
-		try {
-			ft.constructor(F, "f", ft.integerType(), "k");
-			fail("should not be able to introduce overlapping constructor after extending");
-		}
-		catch (TypeDeclarationException e) {
-			// should happen
-		}
-		
-		Type G = ft.abstractDataType("G");
-		ft.constructor(G, "f", ft.integerType(), "i");
-		try {
-			ft.extendAbstractDataType(G, E, "z");
-			fail("should not allowed to introduce overlapping constructors");
-		}
-		catch (TypeDeclarationException e) {
-			// should happen
-		}
-
 	}
 
 	public void testIsSubtypeOf() {
