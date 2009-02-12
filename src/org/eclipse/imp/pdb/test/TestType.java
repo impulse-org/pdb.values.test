@@ -172,6 +172,12 @@ public class TestType extends TestCase {
 				.nodeType()));
 	}
 
+	public void testVoid() {
+		for (Type t : allTypes) {
+			assertFalse(t.isSubtypeOf(ft.voidType()));
+		}
+	}
+	
 	public void testIsSubtypeOf() {
 		for (Type t : allTypes) {
 			if (!t.isSubtypeOf(t)) {
