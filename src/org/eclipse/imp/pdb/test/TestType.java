@@ -20,9 +20,9 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.Type;
-import org.eclipse.imp.pdb.facts.type.TypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public class TestType extends TestCase {
@@ -47,7 +47,7 @@ public class TestType extends TestCase {
 			for (int i = 0; i < 2; i++) {
 				recombine();
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			throw new RuntimeException("fact type error in setup", e);
 		}
 	}
@@ -56,7 +56,7 @@ public class TestType extends TestCase {
 		super.setUp();
 	}
 
-	private static void recombine() throws FactTypeError {
+	private static void recombine() throws FactTypeUseException {
 		List<Type> newTypes = new LinkedList<Type>();
 		int max1 = COMBINATION_UPPERBOUND;
 
@@ -136,7 +136,7 @@ public class TestType extends TestCase {
 		try {
 			ft.aliasType("DiGraph", ft.setType(T), T);
 			fail("should not be able to redefine alias");
-		} catch (TypeDeclarationException e) {
+		} catch (FactTypeDeclarationException e) {
 			// this should happen
 		}
 	}

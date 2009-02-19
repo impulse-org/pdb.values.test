@@ -15,10 +15,10 @@ package org.eclipse.imp.pdb.test;
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IValue;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.Type;
-import org.eclipse.imp.pdb.facts.type.TypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public class TestTypeFactory extends TestCase {
@@ -221,7 +221,7 @@ public class TestTypeFactory extends TestCase {
 					type.getFieldType(1) != ft.integerType()) {
 				fail("relation should mimick tuple field types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("type error for correct relation");
 		}
 	}
@@ -237,7 +237,7 @@ public class TestTypeFactory extends TestCase {
 			if (type != ft.relTypeFromTuple(namedType2)) {
 				fail("relation types should be canonical");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("type error for correct relation");
 		}
 	}
@@ -334,10 +334,10 @@ public class TestTypeFactory extends TestCase {
 			try {
 				ft.aliasType("myType", ft.doubleType());
 				fail("Should not be allowed to redeclare a type name");
-			} catch (TypeDeclarationException e) {
+			} catch (FactTypeDeclarationException e) {
 				// this should happen
 			}
-		} catch (TypeDeclarationException e) {
+		} catch (FactTypeDeclarationException e) {
 			fail("the above should be type correct");
 		}
 	}

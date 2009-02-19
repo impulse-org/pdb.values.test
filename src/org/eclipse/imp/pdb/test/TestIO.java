@@ -20,10 +20,10 @@ import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
 import org.eclipse.imp.pdb.facts.io.XMLReader;
 import org.eclipse.imp.pdb.facts.io.XMLWriter;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
@@ -107,7 +107,7 @@ public class TestIO extends TestCase {
 					fail(testXML[i] + " did not parse correctly: " + result + " != " + testValues[i]);
 				}
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			e.printStackTrace();
 			fail();
 		} catch (IOException e) {

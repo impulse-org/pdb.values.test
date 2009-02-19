@@ -21,7 +21,7 @@ import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestSet extends TestCase {
@@ -54,7 +54,7 @@ public abstract class BaseTestSet extends TestCase {
 			}
 			
 			integerUniverse = w.done();
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("this should be type correct");
 		}
 	}
@@ -74,7 +74,7 @@ public abstract class BaseTestSet extends TestCase {
 				fail("insertion failed");
 			}
 			
-		} catch (FactTypeError e1) {
+		} catch (FactTypeUseException e1) {
 			fail("type checking error:" + e1);
 		}
 		
@@ -83,7 +83,7 @@ public abstract class BaseTestSet extends TestCase {
 		try {
 			numberSet.insert(integers[0]);
 			numberSet.insert(doubles[0]);
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("should be able to insert subtypes:" + e);
 		}
 	}
@@ -103,7 +103,7 @@ public abstract class BaseTestSet extends TestCase {
 		
 		try {
 			set1.contains(integers[0]);
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("should be able to check for containment of integers");
 		}
 	}
@@ -149,7 +149,7 @@ public abstract class BaseTestSet extends TestCase {
 				fail("non-intersection sets");
 			}
 			
-		} catch (FactTypeError et) {
+		} catch (FactTypeUseException et) {
 			fail("this shouls all be typesafe");
 		}
 		
@@ -159,7 +159,7 @@ public abstract class BaseTestSet extends TestCase {
 			if (dSet.intersect(set1).getElementType() != tf.valueType()) {
 				fail("intersect should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			// this should not happen
 		}
 	}
@@ -229,7 +229,7 @@ public abstract class BaseTestSet extends TestCase {
 				fail("subtract failed");
 			}
 			
-		} catch (FactTypeError et) {
+		} catch (FactTypeUseException et) {
 			fail("this shouls all be typesafe");
 		}
 		
@@ -239,7 +239,7 @@ public abstract class BaseTestSet extends TestCase {
 			if (dSet.subtract(set1).getElementType() != tf.doubleType()) {
 				fail("subtract should produce type of left side");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			// this should not happen
 		}
 	}
@@ -285,7 +285,7 @@ public abstract class BaseTestSet extends TestCase {
 				fail("union failed");
 			}
 			
-		} catch (FactTypeError et) {
+		} catch (FactTypeUseException et) {
 			fail("this shouls all be typesafe");
 		}
 		
@@ -295,7 +295,7 @@ public abstract class BaseTestSet extends TestCase {
 			if (dSet.union(set1).getElementType() != tf.valueType()) {
 				fail("union should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			// this should not happen
 		}
 	}
@@ -312,7 +312,7 @@ public abstract class BaseTestSet extends TestCase {
 			if (i != integerUniverse.size()) {
 				fail("iterator did not iterate over everything");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("should be type correct");
 		} 
 	}

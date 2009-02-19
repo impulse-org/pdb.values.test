@@ -22,7 +22,7 @@ import org.eclipse.imp.pdb.facts.ISourceRange;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
@@ -48,7 +48,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			if (!r.getType().isRelationType()) {
 				fail("relation does not have a relation type");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("type error on the construction of a valid relation: " + e);
 		}
 	}
@@ -93,7 +93,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 					}
 				}
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			System.err.println(e);
 			fail("this should all be type correct");
 		}
@@ -115,7 +115,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			if (l.size() != 0) {
 				fail("empty list not empty");
 			}
-		} catch (FactTypeError e1) {
+		} catch (FactTypeUseException e1) {
 			fail("this was a correct type");
 		}
 		
@@ -123,7 +123,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			ft.aliasType("notASet", ft.integerType()).make(ff);
 			fail("should not be possible to make a set that is not a set");
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// should happen
 		}
 	}
@@ -168,7 +168,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 					}
 				}
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			System.err.println(e);
 			fail("this should all be type correct");
 		}
@@ -191,7 +191,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			if (l.length() != 0) {
 				fail("empty list not empty");
 			}
-		} catch (FactTypeError e1) {
+		} catch (FactTypeUseException e1) {
 			fail("this was a correct type");
 		}
 		
@@ -199,7 +199,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			ft.aliasType("notAList", ft.integerType()).make(ff);
 			fail("should not be possible to make a list that is not a list");
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// should happen
 		}
 	}

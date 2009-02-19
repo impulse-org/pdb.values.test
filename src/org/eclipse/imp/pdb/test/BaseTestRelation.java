@@ -23,7 +23,7 @@ import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
@@ -150,7 +150,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!integerRelation.closure().isEqual(integerRelation)) {
 				fail("closure adds extra tuples?");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("integerRelation is reflexive, so why an error?");
 		}
 		
@@ -158,7 +158,7 @@ public abstract class BaseTestRelation extends TestCase {
 			IRelation rel = vf.relation(tf.tupleType(tf.integerType(), tf.integerType()));
 			rel.closure();
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			fail("reflexivity with subtyping is allowed");
 		}
 		
@@ -167,7 +167,7 @@ public abstract class BaseTestRelation extends TestCase {
 			rel.closure();
 			fail("relation is not reflexive but no type error thrown");
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// this should happen
 		}
 		
@@ -200,7 +200,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("closure does not contain required elements");
 			}
 		
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("this should all be type correct");
 		}
 	}
@@ -216,7 +216,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (comp.size() != integerRelation.size()) {
 				fail("numner of expected tuples is off");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 		
@@ -240,7 +240,7 @@ public abstract class BaseTestRelation extends TestCase {
 			  vf.relation(vf.tuple(doubles[0],doubles[0])).compose(rel1);
 			  fail("relations should not be composable");
 			}
-			catch (FactTypeError e) {
+			catch (FactTypeUseException e) {
 				// this should happen
 			}
 			
@@ -249,7 +249,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!comp.isEqual(rel3)) {
 				fail("composition does not produce expected result");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 	}
@@ -261,7 +261,7 @@ public abstract class BaseTestRelation extends TestCase {
 					fail("contains returns false instead of true");
 				}
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("this should be type correct");
 		}
 	}
@@ -289,7 +289,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("insert failed");
 			}
 			
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 	}
@@ -308,7 +308,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!type.getFieldType(0).isValueType()) {
 				fail("intersection should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("intersecting types which have a lub should be possible");
 		}
 		
@@ -334,7 +334,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("intersection with empty set should produce empty");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		} 
 	}
@@ -353,7 +353,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!type.getFieldType(0).isValueType()) {
 				fail("intersection should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("intersecting types which have a lub should be possible");
 		}
 		
@@ -379,7 +379,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("intersection with empty set should produce empty");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		} 
 	}
@@ -395,7 +395,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty diff failed");
 			}
 			
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("subtracting types which have a lub should be possible");
 		}
 		
@@ -419,7 +419,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("subtracting from empty set should produce empty");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		} 
 	}
@@ -434,7 +434,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("empty diff failed");
 			}
 			
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("subtracting types which have a lub should be possible");
 		}
 		
@@ -454,7 +454,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("subtracting from empty set should produce empty");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		}
 	}
@@ -473,7 +473,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!type.getFieldType(0).isValueType()) {
 				fail("union should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("union types which have a lub should be possible");
 		}
 		
@@ -500,7 +500,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("union with empty set should produce same set");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		} 
 	}
@@ -519,7 +519,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (!type.getFieldType(0).isValueType()) {
 				fail("union should produce lub types");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 		    fail("union types which have a lub should be possible");
 		}
 		
@@ -546,7 +546,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("union with empty set should produce same set");
 			}
 
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should all be type safe");
 		} 
 	}
@@ -567,7 +567,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (i != integerRelation.size()) {
 				fail("iterator skipped elements");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 	}
@@ -602,7 +602,7 @@ public abstract class BaseTestRelation extends TestCase {
 			if (carrier1.intersect(setOfDoubles).size() != 3) {
 				fail("doubles should be in there still");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 		

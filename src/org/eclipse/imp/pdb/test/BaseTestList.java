@@ -20,7 +20,7 @@ import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IListWriter;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestList extends TestCase {
@@ -58,7 +58,7 @@ public abstract class BaseTestList extends TestCase {
 			if (namedList.getElementType() != tf.integerType()) {
 				fail("named list has wrong elementtype");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 		
@@ -77,7 +77,7 @@ public abstract class BaseTestList extends TestCase {
 				fail("element was not appended");
 			}
 			
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 		
@@ -85,7 +85,7 @@ public abstract class BaseTestList extends TestCase {
 			if (!integerList.append(vf.dubble(2)).getElementType().isValueType()) {
 			  fail("append should lub the element type");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			// this should happen
 		}
 	}
@@ -111,7 +111,7 @@ public abstract class BaseTestList extends TestCase {
 				fail("element was not insrrted");
 			}
 			
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail("the above should be type correct");
 		}
 		
@@ -119,7 +119,7 @@ public abstract class BaseTestList extends TestCase {
 			if (!integerList.insert(vf.dubble(2)).getElementType().isValueType()) {
 			  fail("insert should lub the element type");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			// this should happen
 		}
 	}

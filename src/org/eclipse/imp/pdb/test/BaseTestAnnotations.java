@@ -17,9 +17,9 @@ import junit.framework.TestCase;
 import org.eclipse.imp.pdb.facts.IConstructor;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.type.FactTypeError;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.Type;
-import org.eclipse.imp.pdb.facts.type.TypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 
 public abstract class BaseTestAnnotations extends TestCase {
@@ -39,13 +39,13 @@ public abstract class BaseTestAnnotations extends TestCase {
 		try {
 			tf.declareAnnotation(tf.integerType(), "a", tf.integerType());
 		}
-		catch (TypeDeclarationException e) {
+		catch (FactTypeDeclarationException e) {
 			// this should happen
 		}
 		try {
 			tf.declareAnnotation(tf.doubleType(), "a", tf.integerType());
 		}
-		catch (TypeDeclarationException e) {
+		catch (FactTypeDeclarationException e) {
 			// this should happen
 		}
 	}
@@ -54,10 +54,10 @@ public abstract class BaseTestAnnotations extends TestCase {
 		try {
 			tf.declareAnnotation(E, "size", tf.integerType());
 		}
-		catch (TypeDeclarationException e) {
+		catch (FactTypeDeclarationException e) {
 			fail(e.toString());
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			fail(e.toString());
 		}
 		
@@ -65,7 +65,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			tf.declareAnnotation(E, "size", tf.doubleType());
 			fail("double declaration is not allowed");
 		}
-		catch (TypeDeclarationException e) {
+		catch (FactTypeDeclarationException e) {
 			// this should happen
 		}
 	}
@@ -78,17 +78,17 @@ public abstract class BaseTestAnnotations extends TestCase {
 			n.setAnnotation("size2", vf.integer(0));
 			fail("can not set annotation that is not declared");
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// this should happen
 		}
 		
 		try {
 			n.setAnnotation("size", vf.integer(0));
 		}
-		catch (TypeDeclarationException e) {
+		catch (FactTypeDeclarationException e) {
 			fail(e.toString());
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			fail(e.toString());
 		}
 	}
@@ -101,7 +101,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			n.getAnnotation("size2");
 			fail();
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// this should happen
 		}
 		
@@ -109,7 +109,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			if (n.getAnnotation("size") != null) {
 				fail("annotation should be null");
 			}
-		} catch (FactTypeError e) {
+		} catch (FactTypeUseException e) {
 			fail(e.toString());
 		}
 		
@@ -155,7 +155,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			n.hasAnnotation("size2");
 			fail("can not set annotation that is not declared");
 		}
-		catch (FactTypeError e) {
+		catch (FactTypeUseException e) {
 			// this should happen
 		}
 		
