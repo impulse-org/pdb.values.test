@@ -26,22 +26,24 @@ import org.eclipse.imp.pdb.facts.io.XMLReader;
 import org.eclipse.imp.pdb.facts.io.XMLWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public class TestIO extends TestCase {
+	private static TypeStore ts = new TypeStore();
 	private static TypeFactory tf = TypeFactory.getInstance();
 	private static IValueFactory vf = ValueFactory.getInstance();
-	private static Type Boolean = tf.abstractDataType("Boolean");
+	private static Type Boolean = ts.abstractDataType("Boolean");
 	
-	private static Type Name = tf.abstractDataType("Name");
-	private static Type True = tf.constructor(Boolean, "true");
-	private static Type False= tf.constructor(Boolean, "false");
-	private static Type And= tf.constructor(Boolean, "and", Boolean, Boolean);
-	private static Type Or= tf.constructor(Boolean, "or", tf.listType(Boolean));
-	private static Type Not= tf.constructor(Boolean, "not", Boolean);
-	private static Type TwoTups = tf.constructor(Boolean, "twotups", tf.tupleType(Boolean, Boolean), tf.tupleType(Boolean, Boolean));
-	private static Type NameNode  = tf.constructor(Name, "name", tf.stringType());
-	private static Type Friends = tf.constructor(Boolean, "friends", tf.listType(Name));
-	private static Type Couples = tf.constructor(Boolean, "couples", tf.listType(tf.tupleType(Name, Name)));
+	private static Type Name = ts.abstractDataType("Name");
+	private static Type True = ts.constructor(Boolean, "true");
+	private static Type False= ts.constructor(Boolean, "false");
+	private static Type And= ts.constructor(Boolean, "and", Boolean, Boolean);
+	private static Type Or= ts.constructor(Boolean, "or", tf.listType(Boolean));
+	private static Type Not= ts.constructor(Boolean, "not", Boolean);
+	private static Type TwoTups = ts.constructor(Boolean, "twotups", tf.tupleType(Boolean, Boolean), tf.tupleType(Boolean, Boolean));
+	private static Type NameNode  = ts.constructor(Name, "name", tf.stringType());
+	private static Type Friends = ts.constructor(Boolean, "friends", tf.listType(Name));
+	private static Type Couples = ts.constructor(Boolean, "couples", tf.listType(tf.tupleType(Name, Name)));
 	
 	private IValue[] testValues = {
 			vf.constructor(True),
@@ -100,7 +102,7 @@ public class TestIO extends TestCase {
 		
 		try {
 			for (int i = 0; i < testXML.length; i++) {
-				IValue result = testReader.read(vf, Boolean, new ByteArrayInputStream(testXML[i].getBytes()));
+				IValue result = testReader.read(vf, ts, Boolean, new ByteArrayInputStream(testXML[i].getBytes()));
 				System.err.println(testXML[i] + " -> " + result);
 				
 				if (!result.isEqual(testValues[i])) {

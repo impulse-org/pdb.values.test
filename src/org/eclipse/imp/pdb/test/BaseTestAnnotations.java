@@ -21,10 +21,12 @@ import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public abstract class BaseTestAnnotations extends TestCase {
     private IValueFactory vf;
     private TypeFactory tf = TypeFactory.getInstance();
+    private TypeStore ts = new TypeStore();
     private Type E;
     private Type N;
     
@@ -37,13 +39,13 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testDeclarationOnNonAllowedType() {
 		try {
-			tf.declareAnnotation(tf.integerType(), "a", tf.integerType());
+			ts.declareAnnotation(tf.integerType(), "a", tf.integerType());
 		}
 		catch (FactTypeDeclarationException e) {
 			// this should happen
 		}
 		try {
-			tf.declareAnnotation(tf.doubleType(), "a", tf.integerType());
+			ts.declareAnnotation(tf.doubleType(), "a", tf.integerType());
 		}
 		catch (FactTypeDeclarationException e) {
 			// this should happen
@@ -52,7 +54,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testDoubleDeclaration() {
 		try {
-			tf.declareAnnotation(E, "size", tf.integerType());
+			ts.declareAnnotation(E, "size", tf.integerType());
 		}
 		catch (FactTypeDeclarationException e) {
 			fail(e.toString());
@@ -62,7 +64,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 		}
 		
 		try {
-			tf.declareAnnotation(E, "size", tf.doubleType());
+			ts.declareAnnotation(E, "size", tf.doubleType());
 			fail("double declaration is not allowed");
 		}
 		catch (FactTypeDeclarationException e) {
@@ -72,10 +74,10 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testSetAnnotation() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		tf.declareAnnotation(E, "size", tf.integerType());
+		ts.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
-			n.setAnnotation("size2", vf.integer(0));
+			n.setAnnotation(ts, "size2", vf.integer(0));
 			fail("can not set annotation that is not declared");
 		}
 		catch (FactTypeUseException e) {
@@ -95,10 +97,10 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testGetAnnotation() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		tf.declareAnnotation(E, "size", tf.integerType());
+		ts.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
-			n.getAnnotation("size2");
+			n.getAnnotation(ts, "size2");
 			fail();
 		}
 		catch (FactTypeUseException e) {
@@ -122,7 +124,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testImmutability() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		tf.declareAnnotation(E, "size", tf.integerType());
+		ts.declareAnnotation(E, "size", tf.integerType());
 		
 		IConstructor m = n.setAnnotation("size", vf.integer(1));
 		
@@ -137,22 +139,22 @@ public abstract class BaseTestAnnotations extends TestCase {
 	
 	public void testDeclaresAnnotation() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		tf.declareAnnotation(E, "size", tf.integerType());
+		ts.declareAnnotation(E, "size", tf.integerType());
 		
-		if (!n.declaresAnnotation("size")) {
+		if (!n.declaresAnnotation(ts, "size")) {
 			fail();
 		}
 		
-		if (n.declaresAnnotation("size2")) {
+		if (n.declaresAnnotation(ts, "size2")) {
 			fail();
 		}
 	}
 	public void testHasAnnotation() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		tf.declareAnnotation(E, "size", tf.integerType());
+		ts.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
-			n.hasAnnotation("size2");
+			n.hasAnnotation(ts, "size2");
 			fail("can not set annotation that is not declared");
 		}
 		catch (FactTypeUseException e) {

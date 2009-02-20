@@ -20,6 +20,7 @@ import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public class TestTypeFactory extends TestCase {
 	private TypeFactory ft = TypeFactory.getInstance();
@@ -324,15 +325,16 @@ public class TestTypeFactory extends TestCase {
 
 	public void testNamedType() {
 		try {
-			Type t1 = ft.aliasType("myType", ft.integerType());
-			Type t2 = ft.aliasType("myType", ft.integerType());
+			TypeStore ts = new TypeStore();
+			Type t1 = ts.aliasType("myType", ft.integerType());
+			Type t2 = ts.aliasType("myType", ft.integerType());
 
 			if (t1 != t2) {
 				fail("named types should be canonical");
 			}
 
 			try {
-				ft.aliasType("myType", ft.doubleType());
+				ts.aliasType("myType", ft.doubleType());
 				fail("Should not be allowed to redeclare a type name");
 			} catch (FactTypeDeclarationException e) {
 				// this should happen

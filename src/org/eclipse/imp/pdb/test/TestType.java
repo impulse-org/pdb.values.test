@@ -24,6 +24,7 @@ import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public class TestType extends TestCase {
 	private static final int COMBINATION_UPPERBOUND = 5;
@@ -107,8 +108,9 @@ public class TestType extends TestCase {
 
 	public void testParameterizedAlias() {
 		Type T = ft.parameterType("T");
+		TypeStore ts = new TypeStore();
 		// DiGraph[&T] = rel[&T from ,&T to]
-		Type DiGraph = ft.aliasType("DiGraph", ft.relType(T, "from", T, "to"),
+		Type DiGraph = ts.aliasType("DiGraph", ft.relType(T, "from", T, "to"),
 				T);
 		Type IntInstance = ft.relType(ft.integerType(), ft.integerType());
 		Type ValueInstance = ft.relType(ft.valueType(), ft.valueType());
@@ -134,7 +136,7 @@ public class TestType extends TestCase {
 		assertTrue(ComputedInstance.isSubtypeOf(ValueInstance));
 
 		try {
-			ft.aliasType("DiGraph", ft.setType(T), T);
+			ts.aliasType("DiGraph", ft.setType(T), T);
 			fail("should not be able to redefine alias");
 		} catch (FactTypeDeclarationException e) {
 			// this should happen
