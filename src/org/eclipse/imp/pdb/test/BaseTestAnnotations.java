@@ -77,14 +77,6 @@ public abstract class BaseTestAnnotations extends TestCase {
 		ts.declareAnnotation(E, "size", tf.integerType());
 		
 		try {
-			n.setAnnotation(ts, "size2", vf.integer(0));
-			fail("can not set annotation that is not declared");
-		}
-		catch (FactTypeUseException e) {
-			// this should happen
-		}
-		
-		try {
 			n.setAnnotation("size", vf.integer(0));
 		}
 		catch (FactTypeDeclarationException e) {
@@ -98,14 +90,6 @@ public abstract class BaseTestAnnotations extends TestCase {
 	public void testGetAnnotation() {
 		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
 		ts.declareAnnotation(E, "size", tf.integerType());
-		
-		try {
-			n.getAnnotation(ts, "size2");
-			fail();
-		}
-		catch (FactTypeUseException e) {
-			// this should happen
-		}
 		
 		try {
 			if (n.getAnnotation("size") != null) {
@@ -149,19 +133,6 @@ public abstract class BaseTestAnnotations extends TestCase {
 			fail();
 		}
 	}
-	public void testHasAnnotation() {
-		IConstructor n = (IConstructor) N.make(vf, vf.integer(0));
-		ts.declareAnnotation(E, "size", tf.integerType());
-		
-		try {
-			n.hasAnnotation(ts, "size2");
-			fail("can not set annotation that is not declared");
-		}
-		catch (FactTypeUseException e) {
-			// this should happen
-		}
-		
-	}
-
+	
 	
 }
