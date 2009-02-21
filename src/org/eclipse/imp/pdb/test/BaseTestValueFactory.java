@@ -25,6 +25,7 @@ import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public abstract class BaseTestValueFactory extends TestCase {
     private IValueFactory ff;
@@ -42,7 +43,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 
 	public void testRelationNamedType() {
 		try {
-			Type type = ft.aliasType("myType2", ft.relType(ft.integerType(), ft.integerType()));
+			Type type = ft.aliasType(new TypeStore(), "myType2", ft.relType(ft.integerType(), ft.integerType()));
 			IRelation r = (IRelation) type.make(ff);
 			
 			if (!r.getType().isRelationType()) {
@@ -102,9 +103,10 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testSetNamedType() {
 		ISet l;
 		try {
-			l = (ISet) ft.aliasType("mySet", ft.setType(ft.integerType())).make(ff);
+			TypeStore typeStore = new TypeStore();
+			l = (ISet) ft.aliasType(typeStore, "mySet", ft.setType(ft.integerType())).make(ff);
 
-			if (!l.getType().isSubtypeOf(ft.aliasType("mySet", ft.setType(ft.integerType())))) {
+			if (!l.getType().isSubtypeOf(ft.aliasType(typeStore, "mySet", ft.setType(ft.integerType())))) {
 				fail("named types should be aliases");
 			}
 
@@ -120,7 +122,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 		
 		try {
-			ft.aliasType("notASet", ft.integerType()).make(ff);
+			ft.aliasType(new TypeStore(), "notASet", ft.integerType()).make(ff);
 			fail("should not be possible to make a set that is not a set");
 		}
 		catch (FactTypeUseException e) {
@@ -177,9 +179,10 @@ public abstract class BaseTestValueFactory extends TestCase {
 	public void testListNamedType() {
 		IList l;
 		try {
-			l = (IList) ft.aliasType("myList", ft.listType(ft.integerType())).make(ff);
+			TypeStore ts = new TypeStore();
+			l = (IList) ft.aliasType(ts, "myList", ft.listType(ft.integerType())).make(ff);
 
-			if (!l.getType().isSubtypeOf(ft.aliasType("myList", ft.listType(ft
+			if (!l.getType().isSubtypeOf(ft.aliasType(ts, "myList", ft.listType(ft
 					.integerType())))) {
 				fail("named types should be aliases");
 			}
@@ -196,7 +199,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 		
 		try {
-			ft.aliasType("notAList", ft.integerType()).make(ff);
+			ft.aliasType(new TypeStore(), "notAList", ft.integerType()).make(ff);
 			fail("should not be possible to make a list that is not a list");
 		}
 		catch (FactTypeUseException e) {

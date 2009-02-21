@@ -30,6 +30,7 @@ public class TestType extends TestCase {
 	private static final int COMBINATION_UPPERBOUND = 5;
 
 	private static TypeFactory ft = TypeFactory.getInstance();
+	private static TypeStore ts = new TypeStore();
 
 	private static List<Type> basic = new LinkedList<Type>();
 	private static List<Type> allTypes = new LinkedList<Type>();
@@ -65,7 +66,7 @@ public class TestType extends TestCase {
 			newTypes.add(ft.tupleType(t1));
 			newTypes.add(ft.relType(t1));
 			newTypes.add(ft.setType(t1));
-			newTypes.add(ft.aliasType("type_" + allTypes.size()
+			newTypes.add(ft.aliasType(ts, "type_" + allTypes.size()
 					+ newTypes.size(), t1));
 			int max2 = COMBINATION_UPPERBOUND;
 
@@ -110,7 +111,7 @@ public class TestType extends TestCase {
 		Type T = ft.parameterType("T");
 		TypeStore ts = new TypeStore();
 		// DiGraph[&T] = rel[&T from ,&T to]
-		Type DiGraph = ts.aliasType("DiGraph", ft.relType(T, "from", T, "to"),
+		Type DiGraph = ft.aliasType(ts, "DiGraph", ft.relType(T, "from", T, "to"),
 				T);
 		Type IntInstance = ft.relType(ft.integerType(), ft.integerType());
 		Type ValueInstance = ft.relType(ft.valueType(), ft.valueType());
@@ -127,7 +128,7 @@ public class TestType extends TestCase {
 
 		// after instantiation, the parameterized type is an alias for rel[int,
 		// int]
-		Type ComputedInstance = DiGraph.instantiate(bindings); // DiGraph[int]
+		Type ComputedInstance = DiGraph.instantiate(ts, bindings); // DiGraph[int]
 		assertTrue(ComputedInstance.equivalent(IntInstance));
 		assertFalse(ValueInstance.isSubtypeOf(ComputedInstance));
 
@@ -136,7 +137,7 @@ public class TestType extends TestCase {
 		assertTrue(ComputedInstance.isSubtypeOf(ValueInstance));
 
 		try {
-			ts.aliasType("DiGraph", ft.setType(T), T);
+			ft.aliasType(ts, "DiGraph", ft.setType(T), T);
 			fail("should not be able to redefine alias");
 		} catch (FactTypeDeclarationException e) {
 			// this should happen
@@ -144,7 +145,7 @@ public class TestType extends TestCase {
 	}
 
 	public void testADT() {
-		Type E = ft.abstractDataType("E");
+		Type E = ft.abstractDataType(ts, "E");
 
 		assertTrue(
 				"Abstract data-types are composed of constructors which are tree nodes",
@@ -152,10 +153,10 @@ public class TestType extends TestCase {
 
 		assertTrue(E.isSubtypeOf(ft.valueType()));
 
-		Type f = ft.constructor(E, "f", ft.integerType(), "i");
-		Type g = ft.constructor(E, "g", ft.integerType(), "j");
+		Type f = ft.constructor(ts, E, "f", ft.integerType(), "i");
+		Type g = ft.constructor(ts, E, "g", ft.integerType(), "j");
 
-		Type a = ft.aliasType("a", ft.integerType());
+		Type a = ft.aliasType(ts, "a", ft.integerType());
 
 		assertFalse(f.isSubtypeOf(ft.integerType())
 				|| f.isSubtypeOf(ft.stringType()) || f.isSubtypeOf(a));
@@ -277,7 +278,7 @@ public class TestType extends TestCase {
 			fail("simple match failed");
 		}
 
-		if (!X.instantiate(bindings).equals(subject)) {
+		if (!X.instantiate(new TypeStore(), bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
 
@@ -290,7 +291,7 @@ public class TestType extends TestCase {
 			fail("relation match failed");
 		}
 
-		if (!relXX.instantiate(bindings).equals(subject)) {
+		if (!relXX.instantiate(new TypeStore(), bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
 
@@ -303,7 +304,7 @@ public class TestType extends TestCase {
 			fail("lubbing during matching failed");
 		}
 
-		if (!relXX.instantiate(bindings).equals(ft.relType(lub, lub))) {
+		if (!relXX.instantiate(new TypeStore(), bindings).equals(ft.relType(lub, lub))) {
 			fail("instantiate failed");
 		}
 

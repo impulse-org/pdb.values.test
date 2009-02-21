@@ -22,6 +22,7 @@ import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public abstract class BaseTestList extends TestCase {
     private IValueFactory vf;
@@ -54,7 +55,7 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			IList namedList = (IList) tf.aliasType("myList", tf.listType(tf.integerType())).make(vf);
+			IList namedList = (IList) tf.aliasType(new TypeStore(), "myList", tf.listType(tf.integerType())).make(vf);
 			if (namedList.getElementType() != tf.integerType()) {
 				fail("named list has wrong elementtype");
 			}

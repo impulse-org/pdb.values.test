@@ -208,11 +208,12 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeType() {
 		try {
-			Type namedType = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			TypeStore store = new TypeStore();
+			Type namedType = ft.aliasType(store, "myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be Type
 			Type type = ft.relTypeFromTuple(namedType);
 		
-			Type namedType2 = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			Type namedType2 = ft.aliasType(store, "myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relTypeFromTuple(namedType2)) {
 				fail("relation types should be canonical");
@@ -229,11 +230,12 @@ public class TestTypeFactory extends TestCase {
 
 	public void testRelTypeNamedType() {
 		try {
-			Type namedType = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			TypeStore store = new TypeStore();
+			Type namedType = ft.aliasType(store, "myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			// note that the declared type of namedType needs to be AliasType
 			Type type = ft.relTypeFromTuple(namedType);
 		
-			Type namedType2 = ft.aliasType("myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
+			Type namedType2 = ft.aliasType(store, "myTuple", ft.tupleType(ft.integerType(), ft.integerType()));
 			
 			if (type != ft.relTypeFromTuple(namedType2)) {
 				fail("relation types should be canonical");
@@ -326,15 +328,15 @@ public class TestTypeFactory extends TestCase {
 	public void testNamedType() {
 		try {
 			TypeStore ts = new TypeStore();
-			Type t1 = ts.aliasType("myType", ft.integerType());
-			Type t2 = ts.aliasType("myType", ft.integerType());
+			Type t1 = ft.aliasType(ts, "myType", ft.integerType());
+			Type t2 = ft.aliasType(ts, "myType", ft.integerType());
 
 			if (t1 != t2) {
 				fail("named types should be canonical");
 			}
 
 			try {
-				ts.aliasType("myType", ft.doubleType());
+				ft.aliasType(ts, "myType", ft.doubleType());
 				fail("Should not be allowed to redeclare a type name");
 			} catch (FactTypeDeclarationException e) {
 				// this should happen

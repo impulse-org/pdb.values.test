@@ -33,8 +33,8 @@ public abstract class BaseTestAnnotations extends TestCase {
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();
 		vf = factory;
-		E = tf.abstractDataType("E");
-		N = tf.constructor(E, "n", tf.integerType());
+		E = tf.abstractDataType(ts, "E");
+		N = tf.constructor(ts, E, "n", tf.integerType());
 	}
 	
 	public void testDeclarationOnNonAllowedType() {

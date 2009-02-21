@@ -19,19 +19,21 @@ import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
+import org.eclipse.imp.pdb.facts.type.TypeStore;
 
 public abstract class BaseTestTree extends TestCase {
     private IValueFactory vf;
     private TypeFactory tf = TypeFactory.getInstance();
+    private TypeStore ts = new TypeStore();
     
-    Type Boolean = tf.abstractDataType("Boolean");
-    Type BoolBinOp = tf.tupleType(Boolean, Boolean);
-    Type BoolOp = tf.tupleType(Boolean);
-    Type True = tf.constructor(Boolean, "true");
-    Type False = tf.constructor(Boolean, "false");
-    Type And = tf.constructor(Boolean, "and", BoolBinOp);
-    Type Or = tf.constructor(Boolean, "and", BoolBinOp);
-    Type Not = tf.constructor(Boolean, "not", BoolOp);
+    Type Boolean = tf.abstractDataType(ts, "Boolean");
+    Type BoolBinOp = tf.tupleType(ts, Boolean, Boolean);
+    Type BoolOp = tf.tupleType(ts, Boolean);
+    Type True = tf.constructor(ts, Boolean, "true");
+    Type False = tf.constructor(ts, Boolean, "false");
+    Type And = tf.constructor(ts, Boolean, "and", BoolBinOp);
+    Type Or = tf.constructor(ts, Boolean, "and", BoolBinOp);
+    Type Not = tf.constructor(ts, Boolean, "not", BoolOp);
     
 	protected void setUp(IValueFactory factory) throws Exception {
 		super.setUp();
