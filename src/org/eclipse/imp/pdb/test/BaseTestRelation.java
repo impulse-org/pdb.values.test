@@ -192,7 +192,7 @@ public abstract class BaseTestRelation extends TestCase {
 				fail("closure contains too few elements");
 			}
 			
-			if (!closed.intersect(test).equals(test)) {
+			if (!closed.intersect(test).isEqual(test)) {
 				fail("closure should contain all original elements");
 			}
 			
