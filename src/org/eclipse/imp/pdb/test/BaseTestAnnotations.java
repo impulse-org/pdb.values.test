@@ -118,9 +118,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			fail("annotation setting should change object identity");
 		}
 		
-		if (m.isEqual(n)) {
-			fail("setting an annotation should change equality");
-		}
+		assertTrue(m.isEqual(n));
 	}
 	
 	public void testDeclaresAnnotation() {

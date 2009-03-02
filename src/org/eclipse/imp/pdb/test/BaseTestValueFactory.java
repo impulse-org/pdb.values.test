@@ -12,17 +12,23 @@
 
 package org.eclipse.imp.pdb.test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IList;
+import org.eclipse.imp.pdb.facts.IMap;
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
+import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ISourceLocation;
 import org.eclipse.imp.pdb.facts.ISourceRange;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
+import org.eclipse.imp.pdb.facts.io.StandardTextWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
 import org.eclipse.imp.pdb.facts.type.TypeStore;
@@ -293,6 +299,57 @@ public abstract class BaseTestValueFactory extends TestCase {
 				|| range.getStartColumn() != 5 || range.getStartLine() != 3
 				|| range.getEndLine() != 4 || range.getEndColumn() != 6) {
 			fail("source range creation is weird");
+		}
+	}
+	
+	public void testToString() {
+		// first we create a lot of values, and
+		// then we check whether toString does the same
+		// as StandardTextWriter
+		ISetWriter basicW = ff.setWriter(ft.valueType());
+		
+		basicW.insert(ff.integer(0),
+				ff.dubble(0.0),
+				ff.sourceLocation("/dev/null", ff.sourceRange(0, 0, 0, 0, 0, 0)),
+				ff.bool(true),
+				ff.bool(false),
+				ff.node("hello"));
+		
+		ISet basic = basicW.done();
+		ISetWriter extended = ff.setWriter(ft.valueType());
+		
+		TypeStore ts = new TypeStore();
+		Type adt = ft.abstractDataType(ts, "E");
+		Type cons0 = ft.constructor(ts, adt, "cons");
+		Type cons1 = ft.constructor(ts, adt, "cons", ft.valueType(), "value");
+
+		extended.insertAll(basic);
+		for (IValue w : basic) {
+			extended.insert(ff.list());
+			extended.insert(ff.list(w));
+			extended.insert(ff.set());
+			extended.insert(ff.set(w));
+			IMap map = ff.map(w.getType(), w.getType());
+			extended.insert(map.put(w,w));
+			ITuple tuple = ff.tuple(w,w);
+			extended.insert(tuple);
+			extended.insert(ff.relation(tuple, tuple));
+			extended.insert(ff.node("hi", w));
+			extended.insert(ff.constructor(cons0));
+			extended.insert(ff.constructor(cons1, w));
+		}
+		
+		StandardTextWriter w = new StandardTextWriter();
+		
+		for (IValue o : extended.done()) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try {
+				w.write(o, out);
+				assertTrue(out.toString().equals(o.toString()));
+			} catch (IOException e) {
+				fail(e.toString());
+				e.printStackTrace();
+			}
 		}
 	}
 }
