@@ -12,6 +12,7 @@
 
 package org.eclipse.imp.pdb.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
+import org.eclipse.imp.pdb.facts.io.StandardTextReader;
 import org.eclipse.imp.pdb.facts.io.StandardTextWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
@@ -306,6 +308,42 @@ public abstract class BaseTestValueFactory extends TestCase {
 		// first we create a lot of values, and
 		// then we check whether toString does the same
 		// as StandardTextWriter
+		ISetWriter extended = createSomeValues();
+		
+		StandardTextWriter w = new StandardTextWriter();
+		
+		for (IValue o : extended.done()) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try {
+				w.write(o, out);
+				assertTrue(out.toString().equals(o.toString()));
+			} catch (IOException e) {
+				fail(e.toString());
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void testStandardReaderWriter() {
+		StandardTextWriter w = new StandardTextWriter();
+		StandardTextReader r = new StandardTextReader();
+		
+		try {
+			for (IValue o : createSomeValues().done()) {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				w.write(o, out);
+				ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+				IValue read = r.read(ff, in);
+				if (!o.isEqual(read)) {
+					assertTrue(o.isEqual(read));
+				}
+			}
+		} catch (IOException e) {
+			fail();
+		} 
+	}
+
+	private ISetWriter createSomeValues() {
 		ISetWriter basicW = ff.setWriter(ft.valueType());
 		
 		basicW.insert(ff.integer(0),
@@ -335,21 +373,9 @@ public abstract class BaseTestValueFactory extends TestCase {
 			extended.insert(tuple);
 			extended.insert(ff.relation(tuple, tuple));
 			extended.insert(ff.node("hi", w));
-			extended.insert(ff.constructor(cons0));
-			extended.insert(ff.constructor(cons1, w));
+//			extended.insert(ff.constructor(cons0));
+//			extended.insert(ff.constructor(cons1, w));
 		}
-		
-		StandardTextWriter w = new StandardTextWriter();
-		
-		for (IValue o : extended.done()) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				w.write(o, out);
-				assertTrue(out.toString().equals(o.toString()));
-			} catch (IOException e) {
-				fail(e.toString());
-				e.printStackTrace();
-			}
-		}
+		return extended;
 	}
 }
