@@ -15,6 +15,7 @@ package org.eclipse.imp.pdb.test;
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IConstructor;
+import org.eclipse.imp.pdb.facts.INode;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
@@ -35,6 +36,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 		vf = factory;
 		E = tf.abstractDataType(ts, "E");
 		N = tf.constructor(ts, E, "n", tf.integerType());
+		ts.declareAnnotation(E, "x", tf.integerType());
 	}
 	
 	public void testDeclarationOnNonAllowedType() {
@@ -134,5 +136,23 @@ public abstract class BaseTestAnnotations extends TestCase {
 		}
 	}
 	
+	public void testEqualityNode() {
+		INode n = vf.node("hello");
+		INode na = n.setAnnotation("audience", vf.string("world"));
+		
+		assertTrue(n.isEqual(na));
+		assertTrue(vf.set(n).isEqual(vf.set(na)));
+		assertTrue(vf.list(n).isEqual(vf.list(na)));
+		assertTrue(vf.set(vf.set(n)).isEqual(vf.set(vf.set(na))));
+	}
 	
+	public void testEqualityConstructor() {
+		IConstructor n = (IConstructor) N.make(vf, vf.integer(1));
+		IConstructor na = n.setAnnotation("x", vf.integer(1));
+		
+		assertTrue(n.isEqual(na));
+		assertTrue(vf.set(n).isEqual(vf.set(na)));
+		assertTrue(vf.list(n).isEqual(vf.list(na)));
+		assertTrue(vf.set(vf.set(n)).isEqual(vf.set(vf.set(na))));
+	}
 }
