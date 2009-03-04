@@ -15,6 +15,8 @@ package org.eclipse.imp.pdb.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import junit.framework.TestCase;
 
@@ -24,7 +26,6 @@ import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ISourceLocation;
-import org.eclipse.imp.pdb.facts.ISourceRange;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
@@ -286,41 +287,51 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 	}
 
-	public void testSourceLocation() {
-		ISourceRange range = ff.sourceRange(1, 2, 3, 4, 5, 6);
-		ISourceLocation sl = ff.sourceLocation("/dev/null", range);
-		if (!sl.getPath().equals("/dev/null") ||
-				!sl.getRange().isEqual(range)) {
-			fail("source location creation is weird");
-		}
-	}
+//	public void testSourceLocation() {
+//		ISourceLocation sl;
+//		try {
+//			sl = ff.sourceLocation(new URL("file:///dev/null"), 1, 2, 3, 4, 5, 6);
+//			if (!sl.getURL().getPath().equals("/dev/null")) {
+//				fail("source location creation is weird");
+//			}
+//			
+//			if (sl.getStartOffset() != 1 || sl.getLength() != 2
+//					|| sl.getStartColumn() != 5 || sl.getStartLine() != 3
+//					|| sl.getEndLine() != 4 || sl.getEndColumn() != 6) {
+//				fail("source range creation is weird");
+//			}
+//		} catch (MalformedURLException e) {
+//			fail();
+//		}
+//		
+//	}
 
-	public void testSourceRange() {
-		ISourceRange range = ff.sourceRange(1, 2, 3, 4, 5, 6);
-		if (range.getStartOffset() != 1 || range.getLength() != 2
-				|| range.getStartColumn() != 5 || range.getStartLine() != 3
-				|| range.getEndLine() != 4 || range.getEndColumn() != 6) {
-			fail("source range creation is weird");
-		}
-	}
-	
 	public void testToString() {
 		// first we create a lot of values, and
 		// then we check whether toString does the same
 		// as StandardTextWriter
-		ISetWriter extended = createSomeValues();
-		
-		StandardTextWriter w = new StandardTextWriter();
-		
-		for (IValue o : extended.done()) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			try {
-				w.write(o, out);
-				assertTrue(out.toString().equals(o.toString()));
-			} catch (IOException e) {
-				fail(e.toString());
-				e.printStackTrace();
+		ISetWriter extended;
+		try {
+			extended = createSomeValues();
+
+
+			StandardTextWriter w = new StandardTextWriter();
+
+			for (IValue o : extended.done()) {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				try {
+					w.write(o, out);
+					assertTrue(out.toString().equals(o.toString()));
+				} catch (IOException e) {
+					fail(e.toString());
+					e.printStackTrace();
+				}
 			}
+
+		} catch (FactTypeUseException e1) {
+			fail(e1.toString());
+		} catch (MalformedURLException e1) {
+			fail(e1.toString());
 		}
 	}
 	
@@ -343,12 +354,12 @@ public abstract class BaseTestValueFactory extends TestCase {
 		} 
 	}
 
-	private ISetWriter createSomeValues() {
+	private ISetWriter createSomeValues() throws FactTypeUseException, MalformedURLException {
 		ISetWriter basicW = ff.setWriter(ft.valueType());
 		
 		basicW.insert(ff.integer(0),
 				ff.dubble(0.0),
-				ff.sourceLocation("/dev/null", ff.sourceRange(0, 0, 0, 0, 0, 0)),
+				ff.sourceLocation(new URL("file:///dev/null"), 0, 0, 0, 0, 0, 0),
 				ff.bool(true),
 				ff.bool(false),
 				ff.node("hello"));
@@ -356,10 +367,10 @@ public abstract class BaseTestValueFactory extends TestCase {
 		ISet basic = basicW.done();
 		ISetWriter extended = ff.setWriter(ft.valueType());
 		
-		TypeStore ts = new TypeStore();
-		Type adt = ft.abstractDataType(ts, "E");
-		Type cons0 = ft.constructor(ts, adt, "cons");
-		Type cons1 = ft.constructor(ts, adt, "cons", ft.valueType(), "value");
+//		TypeStore ts = new TypeStore();
+//		Type adt = ft.abstractDataType(ts, "E");
+//		Type cons0 = ft.constructor(ts, adt, "cons");
+//		Type cons1 = ft.constructor(ts, adt, "cons", ft.valueType(), "value");
 
 		extended.insertAll(basic);
 		for (IValue w : basic) {

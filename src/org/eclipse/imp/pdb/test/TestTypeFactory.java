@@ -12,6 +12,9 @@
 
 package org.eclipse.imp.pdb.test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IValue;
@@ -28,7 +31,7 @@ public class TestTypeFactory extends TestCase {
 	private ValueFactory ff = ValueFactory.getInstance();
 
 	private Type[] types = new Type[] { ft.integerType(), ft.doubleType(),
-			ft.sourceLocationType(), ft.sourceRangeType(), ft.valueType(),
+			ft.sourceLocationType(),  ft.valueType(),
 			ft.listType(ft.integerType()), ft.setType(ft.doubleType()) };
 
 	protected void setUp() throws Exception {
@@ -66,12 +69,6 @@ public class TestTypeFactory extends TestCase {
 	public void testStringType() {
 		if (ft.stringType() != ft.stringType()) {
 			fail("stringType should be canonical");
-		}
-	}
-
-	public void testSourceRangeType() {
-		if (ft.sourceRangeType() != ft.sourceRangeType()) {
-			fail("sourceRangeType should be canonical");
 		}
 	}
 
@@ -147,14 +144,14 @@ public class TestTypeFactory extends TestCase {
 
 	public void testTupleTypeOfTypeTypeTypeTypeTypeTypeType() {
 		Type t = ft.tupleType(types[0], types[1], types[2], types[3],
-				types[4], types[5], types[6]);
+				types[4], types[5]);
 
 		if (t != ft.tupleType(types[0], types[1], types[2], types[3],
-				types[4], types[5], types[6])) {
+				types[4], types[5])) {
 			fail("tuple types should be canonical");
 		}
 
-		testTupleTypeOf(t, 7);
+		testTupleTypeOf(t, 6);
 	}
 
 	private void testTupleTypeOf(Type t, int width) {
@@ -185,17 +182,21 @@ public class TestTypeFactory extends TestCase {
 
 	public void testTupleTypeOfIValueArray() {
 		// a and b shadow the 'types' field
-		IValue[] a = new IValue[] { ff.integer(1), ff.dubble(1.0),
-				ff.sourceLocation("bla", ff.sourceRange(0, 0, 0, 0, 0, 0)) };
-		IValue[] b = new IValue[] { ff.integer(1), ff.dubble(1.0),
-				ff.sourceLocation("bla", ff.sourceRange(0, 0, 0, 0, 0, 0)) };
-		Type t = ft.tupleType(a);
+		try {
+			IValue[] a = new IValue[] { ff.integer(1), ff.dubble(1.0),
+					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
+			IValue[] b = new IValue[] { ff.integer(1), ff.dubble(1.0),
+					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
+			Type t = ft.tupleType(a);
 
-		if (t != ft.tupleType(b)) {
-			fail("tuples should be canonical");
+			if (t != ft.tupleType(b)) {
+				fail("tuples should be canonical");
+			}
+
+			testTupleTypeOf(t, 3);
+		} catch (MalformedURLException e) {
+			fail(e.toString());
 		}
-
-		testTupleTypeOf(t, 3);
 	}
 
 	public void testSetTypeOf() {
@@ -317,12 +318,12 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testRelTypeOfTypeTypeTypeTypeTypeTypeType() {
-		Type type = ft.relType(types[0], types[1], types[2], types[3], types[4], types[5], types[6]);
+		Type type = ft.relType(types[0], types[1], types[2], types[3], types[4], types[5]);
 
-		if (type != ft.relType(types[0], types[1], types[2], types[3], types[4], types[5], types[6])) {
+		if (type != ft.relType(types[0], types[1], types[2], types[3], types[4], types[5])) {
 			fail("relation types should be canonical");
 		}
-		testRelationTypeOf(type, 7);
+		testRelationTypeOf(type, 6);
 	}
 
 	public void testNamedType() {

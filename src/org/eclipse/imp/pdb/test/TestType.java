@@ -40,7 +40,6 @@ public class TestType extends TestCase {
 			basic.add(ft.integerType());
 			basic.add(ft.doubleType());
 			basic.add(ft.sourceLocationType());
-			basic.add(ft.sourceRangeType());
 			basic.add(ft.stringType());
 
 			allTypes.add(ft.valueType());
