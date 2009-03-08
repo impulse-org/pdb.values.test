@@ -176,7 +176,9 @@ public class TestType extends TestCase {
 
 	public void testVoid() {
 		for (Type t : allTypes) {
-			assertFalse(t.isSubtypeOf(ft.voidType()));
+			if(t.isSubtypeOf(ft.voidType())) {
+				assertFalse(true);
+			}
 		}
 	}
 	
@@ -307,6 +309,13 @@ public class TestType extends TestCase {
 			fail("instantiate failed");
 		}
 
+	}
+	
+	public void testAlias() {
+		Type alias = ft.aliasType(new TypeStore(), "myValue", ft.valueType());
+		
+		assertTrue(alias.isSubtypeOf(ft.valueType()));
+		assertTrue(ft.valueType().isSubtypeOf(alias));
 	}
 
 }

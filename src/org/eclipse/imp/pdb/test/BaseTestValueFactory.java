@@ -357,9 +357,10 @@ public abstract class BaseTestValueFactory extends TestCase {
 	private ISetWriter createSomeValues() throws FactTypeUseException, MalformedURLException {
 		ISetWriter basicW = ff.setWriter(ft.valueType());
 		
+		// TODO add tests for locations and constructors again
 		basicW.insert(ff.integer(0),
 				ff.dubble(0.0),
-				ff.sourceLocation(new URL("file:///dev/null"), 0, 0, 0, 0, 0, 0),
+//				ff.sourceLocation(new URL("file:///dev/null"), 0, 0, 0, 0, 0, 0),
 				ff.bool(true),
 				ff.bool(false),
 				ff.node("hello"));
