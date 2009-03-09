@@ -55,10 +55,10 @@ public abstract class BaseTestRelation extends TestCase {
 		setOfIntegers = sw.done();
 		
 		doubles = new IValue[10];
-		ISetWriter sw2 = vf.setWriter(tf.doubleType());
+		ISetWriter sw2 = vf.setWriter(tf.realType());
 		
 		for (int i = 0; i < doubles.length; i++) {
-			IValue iv = vf.dubble(i);
+			IValue iv = vf.real(i);
 			doubles[i] = iv;
 			sw2.insert(iv);
 		}
@@ -76,7 +76,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		integerRelation = rw.done();
 		
-		IRelationWriter rw2 = vf.relationWriter(tf.tupleType(tf.doubleType(), tf.doubleType()));
+		IRelationWriter rw2 = vf.relationWriter(tf.tupleType(tf.realType(), tf.realType()));
 		doubleTuples = new ITuple[doubles.length * doubles.length];
 		
 		for (int i = 0; i < doubles.length; i++) {
@@ -163,7 +163,7 @@ public abstract class BaseTestRelation extends TestCase {
 		}
 		
 		try {
-			IRelation rel = vf.relation(tf.tupleType(tf.integerType(), tf.doubleType()));
+			IRelation rel = vf.relation(tf.tupleType(tf.integerType(), tf.realType()));
 			rel.closure();
 			fail("relation is not reflexive but no type error thrown");
 		}
@@ -296,7 +296,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testIntersectIRelation() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		IRelation empty2 = vf.relation(tf.tupleType(tf.doubleType()));
+		IRelation empty2 = vf.relation(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation intersection = empty1.intersect(empty2);
@@ -341,7 +341,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testIntersectISet() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		ISet empty2 = vf.set(tf.tupleType(tf.doubleType()));
+		ISet empty2 = vf.set(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation intersection = empty1.intersect(empty2);
@@ -387,7 +387,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testSubtractIRelation() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		IRelation empty2 = vf.relation(tf.tupleType(tf.doubleType()));
+		IRelation empty2 = vf.relation(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation diff = empty1.subtract(empty2);
@@ -426,7 +426,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testSubtractISet() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		ISet empty2 = vf.set(tf.tupleType(tf.doubleType()));
+		ISet empty2 = vf.set(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation diff = empty1.subtract(empty2);
@@ -461,7 +461,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testUnionIRelation() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		IRelation empty2 = vf.relation(tf.tupleType(tf.doubleType()));
+		IRelation empty2 = vf.relation(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation union = empty1.union(empty2);
@@ -507,7 +507,7 @@ public abstract class BaseTestRelation extends TestCase {
 
 	public void testUnionISet() {
 		IRelation empty1 = vf.relation(tf.tupleType(tf.integerType()));
-		ISet empty2 = vf.set(tf.tupleType(tf.doubleType()));
+		ISet empty2 = vf.set(tf.tupleType(tf.realType()));
 		
 		try {
 			final IRelation union = empty1.union(empty2);

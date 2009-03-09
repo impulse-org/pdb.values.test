@@ -16,7 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import junit.framework.TestCase;
 
@@ -25,7 +24,6 @@ import org.eclipse.imp.pdb.facts.IMap;
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
-import org.eclipse.imp.pdb.facts.ISourceLocation;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
@@ -80,7 +78,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		ITuple[] tuples = new ITuple[7];
 		
 		for (int i = 0; i < 7; i++) {
-			tuples[i] = ff.tuple(ff.integer(i), ff.dubble(i));
+			tuples[i] = ff.tuple(ff.integer(i), ff.real(i));
 		}
 
 		try {
@@ -140,17 +138,17 @@ public abstract class BaseTestValueFactory extends TestCase {
 	}
 
 	public void testSetType() {
-        ISet s = ff.set(ft.doubleType());
+        ISet s = ff.set(ft.realType());
 		
 		if (s.size() != 0) {
 			fail("empty set is not empty");
 		}
 		
-		if (s.getType() != ft.setType(ft.doubleType())) {
+		if (s.getType() != ft.setType(ft.realType())) {
 			fail("should be a list of doubles");
 		}
 
-		if (s.getElementType() != ft.doubleType()) {
+		if (s.getElementType() != ft.realType()) {
 			fail("should be a list of doubles");
 		}
 	}
@@ -217,13 +215,13 @@ public abstract class BaseTestValueFactory extends TestCase {
 	}
 
 	public void testListType() {
-		IList l = ff.list(ft.doubleType());
+		IList l = ff.list(ft.realType());
 		
 		if (l.length() != 0) {
 			fail("empty list is not empty");
 		}
 
-		if (l.getElementType() != ft.doubleType()) {
+		if (l.getElementType() != ft.realType()) {
 			fail("should be a list of doubles");
 		}
 	}
@@ -270,21 +268,15 @@ public abstract class BaseTestValueFactory extends TestCase {
 	}
 
 	public void testInteger() {
-		if (ff.integer(42).getValue() != 42) {
-			fail("integer creation is weird");
-		}
+		assertTrue(ff.integer(42).toString().equals("42"));
 	}
 
 	public void testDubble() {
-		if (ff.dubble(84.5).getValue() != 84.5) {
-			fail("double creation is weird");
-		}
+		assertTrue(ff.real(84.5).toString().equals("84.5"));
 	}
 
 	public void testString() {
-		if (!ff.string("hello").getValue().equals("hello")) {
-			fail("string creation is weird");
-		}
+		assertTrue(ff.string("hello").getValue().equals("hello"));
 	}
 
 //	public void testSourceLocation() {
@@ -359,7 +351,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		
 		// TODO add tests for locations and constructors again
 		basicW.insert(ff.integer(0),
-				ff.dubble(0.0),
+				ff.real(0.0),
 //				ff.sourceLocation(new URL("file:///dev/null"), 0, 0, 0, 0, 0, 0),
 				ff.bool(true),
 				ff.bool(false),

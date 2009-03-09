@@ -33,8 +33,8 @@ public abstract class BaseTestEquality extends TestCase {
 	}
 	
 	public void testDouble() {
-		assertTrue(vf.dubble(0.0).isEqual(vf.dubble(0.0)));
-		assertFalse(vf.dubble(0.0).isEqual(vf.dubble(1.0)));
+		assertTrue(vf.real(0.0).isEqual(vf.real(0.0)));
+		assertFalse(vf.real(0.0).isEqual(vf.real(1.0)));
 	}
 	
 	public void testString() {
@@ -45,24 +45,24 @@ public abstract class BaseTestEquality extends TestCase {
 	
 	public void testList() {
 		assertTrue("element types are comparable", vf.list(tf.voidType()).isEqual(vf.list(tf.integerType()))); 
-		assertFalse("element types are not comparable", vf.list(tf.doubleType()).isEqual(vf.list(tf.integerType())));
+		assertFalse("element types are not comparable", vf.list(tf.realType()).isEqual(vf.list(tf.integerType())));
 		
 		assertTrue(vf.list(vf.integer(1)).isEqual(vf.list(vf.integer(1))));
 		assertFalse(vf.list(vf.integer(1)).isEqual(vf.list(vf.integer(0))));
 		
 		assertTrue(vf.list(vf.list(tf.voidType())).isEqual(vf.list(vf.list(tf.integerType()))));
-		assertFalse(vf.list(vf.list(tf.doubleType())).isEqual(vf.list(vf.list(tf.integerType()))));
+		assertFalse(vf.list(vf.list(tf.realType())).isEqual(vf.list(vf.list(tf.integerType()))));
 	}
 	
 	public void testSet() {
 		assertTrue("element types are comparable", vf.set(tf.voidType()).isEqual(vf.set(tf.integerType()))); 
-		assertFalse("element types are not comparable", vf.set(tf.doubleType()).isEqual(vf.set(tf.integerType())));
+		assertFalse("element types are not comparable", vf.set(tf.realType()).isEqual(vf.set(tf.integerType())));
 		
 		assertTrue(vf.set(vf.integer(1)).isEqual(vf.set(vf.integer(1))));
 		assertFalse(vf.set(vf.integer(1)).isEqual(vf.set(vf.integer(0))));
 		
 		assertTrue(vf.set(vf.set(tf.voidType())).isEqual(vf.set(vf.set(tf.integerType()))));
-		assertFalse(vf.set(vf.set(tf.doubleType())).isEqual(vf.set(vf.set(tf.integerType()))));
+		assertFalse(vf.set(vf.set(tf.realType())).isEqual(vf.set(vf.set(tf.integerType()))));
 	}
 	
 }

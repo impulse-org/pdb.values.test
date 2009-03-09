@@ -47,7 +47,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 			// this should happen
 		}
 		try {
-			ts.declareAnnotation(tf.doubleType(), "a", tf.integerType());
+			ts.declareAnnotation(tf.realType(), "a", tf.integerType());
 		}
 		catch (FactTypeDeclarationException e) {
 			// this should happen
@@ -66,7 +66,7 @@ public abstract class BaseTestAnnotations extends TestCase {
 		}
 		
 		try {
-			ts.declareAnnotation(E, "size", tf.doubleType());
+			ts.declareAnnotation(E, "size", tf.realType());
 			fail("double declaration is not allowed");
 		}
 		catch (FactTypeDeclarationException e) {

@@ -43,7 +43,7 @@ public abstract class BaseTestSet extends TestCase {
 		
 		doubles = new IValue[100];
 		for (int i = 0; i < doubles.length; i++) {
-			doubles[i] = vf.dubble(i);
+			doubles[i] = vf.real(i);
 		}
 		
 		ISetWriter w = vf.setWriter(tf.integerType());
@@ -153,7 +153,7 @@ public abstract class BaseTestSet extends TestCase {
 			fail("this shouls all be typesafe");
 		}
 		
-		ISet dSet = vf.set(tf.doubleType());
+		ISet dSet = vf.set(tf.realType());
 		
 		try {
 			if (dSet.intersect(set1).getElementType() != tf.valueType()) {
@@ -233,10 +233,10 @@ public abstract class BaseTestSet extends TestCase {
 			fail("this shouls all be typesafe");
 		}
 		
-		ISet dSet = vf.set(tf.doubleType());
+		ISet dSet = vf.set(tf.realType());
 		
 		try {
-			if (dSet.subtract(set1).getElementType() != tf.doubleType()) {
+			if (dSet.subtract(set1).getElementType() != tf.realType()) {
 				fail("subtract should produce type of left side");
 			}
 		} catch (FactTypeUseException e) {
@@ -289,7 +289,7 @@ public abstract class BaseTestSet extends TestCase {
 			fail("this shouls all be typesafe");
 		}
 		
-		ISet dSet = vf.set(tf.doubleType());
+		ISet dSet = vf.set(tf.realType());
 		
 		try {
 			if (dSet.union(set1).getElementType() != tf.valueType()) {

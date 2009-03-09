@@ -38,7 +38,7 @@ public class TestType extends TestCase {
 	static {
 		try {
 			basic.add(ft.integerType());
-			basic.add(ft.doubleType());
+			basic.add(ft.realType());
 			basic.add(ft.sourceLocationType());
 			basic.add(ft.stringType());
 
@@ -297,10 +297,10 @@ public class TestType extends TestCase {
 		}
 
 		bindings.clear();
-		subject = ft.relType(ft.integerType(), ft.doubleType());
+		subject = ft.relType(ft.integerType(), ft.realType());
 		relXX.match(subject, bindings);
 
-		Type lub = ft.integerType().lub(ft.doubleType());
+		Type lub = ft.integerType().lub(ft.realType());
 		if (!bindings.get(X).equals(lub)) {
 			fail("lubbing during matching failed");
 		}

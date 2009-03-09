@@ -30,9 +30,9 @@ public class TestTypeFactory extends TestCase {
 
 	private ValueFactory ff = ValueFactory.getInstance();
 
-	private Type[] types = new Type[] { ft.integerType(), ft.doubleType(),
+	private Type[] types = new Type[] { ft.integerType(), ft.realType(),
 			ft.sourceLocationType(),  ft.valueType(),
-			ft.listType(ft.integerType()), ft.setType(ft.doubleType()) };
+			ft.listType(ft.integerType()), ft.setType(ft.realType()) };
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -61,7 +61,7 @@ public class TestTypeFactory extends TestCase {
 	}
 
 	public void testDoubleType() {
-		if (ft.doubleType() != ft.doubleType()) {
+		if (ft.realType() != ft.realType()) {
 			fail("doubleType should be canonical");
 		}
 	}
@@ -183,9 +183,9 @@ public class TestTypeFactory extends TestCase {
 	public void testTupleTypeOfIValueArray() {
 		// a and b shadow the 'types' field
 		try {
-			IValue[] a = new IValue[] { ff.integer(1), ff.dubble(1.0),
+			IValue[] a = new IValue[] { ff.integer(1), ff.real(1.0),
 					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
-			IValue[] b = new IValue[] { ff.integer(1), ff.dubble(1.0),
+			IValue[] b = new IValue[] { ff.integer(1), ff.real(1.0),
 					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
 			Type t = ft.tupleType(a);
 
@@ -337,7 +337,7 @@ public class TestTypeFactory extends TestCase {
 			}
 
 			try {
-				ft.aliasType(ts, "myType", ft.doubleType());
+				ft.aliasType(ts, "myType", ft.realType());
 				fail("Should not be allowed to redeclare a type name");
 			} catch (FactTypeDeclarationException e) {
 				// this should happen
