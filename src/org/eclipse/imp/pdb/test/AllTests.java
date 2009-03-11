@@ -16,6 +16,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.imp.pdb.test.reference.TestAnnotations;
+import org.eclipse.imp.pdb.test.reference.TestBasicValues;
 import org.eclipse.imp.pdb.test.reference.TestEquality;
 import org.eclipse.imp.pdb.test.reference.TestList;
 import org.eclipse.imp.pdb.test.reference.TestRelation;
@@ -34,6 +35,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.eclipse.imp.pdb");
 	
+		suite.addTestSuite(TestBasicValues.class);
 		suite.addTestSuite(TestEquality.class);
 		suite.addTestSuite(TestAnnotations.class);
 		suite.addTestSuite(TestType.class);
