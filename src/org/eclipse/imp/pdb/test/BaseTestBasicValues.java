@@ -24,10 +24,9 @@ abstract public class BaseTestBasicValues extends TestCase {
 	}
 	
 	public void testPreciseRealDivision() {
-		// division is precise to 80*80 digits
 		IReal e100 = vf.real("1E100");
 		IReal maxDiff = vf.real("1E-6300");
 		IReal r9 = vf.real("9");
-		assertTrue(e100.subtract(e100.divide(r9).multiply(r9)).lessEqual(maxDiff).getValue());
+		assertTrue(e100.subtract(e100.divide(r9,80*80).multiply(r9)).lessEqual(maxDiff).getValue());
 	}
 }
