@@ -34,6 +34,7 @@ public abstract class BaseTestEquality extends TestCase {
 	
 	public void testDouble() {
 		assertTrue(vf.real(0.0).isEqual(vf.real(0.0)));
+		assertTrue(vf.real(1.0).isEqual(vf.real(1.00000)));
 		assertFalse(vf.real(0.0).isEqual(vf.real(1.0)));
 	}
 	
