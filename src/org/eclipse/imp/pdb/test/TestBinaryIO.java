@@ -8,7 +8,7 @@
 * Contributors:
 *    Arnold Lankamp - interfaces and implementation
 *******************************************************************************/
-package org.eclipse.imp.pdb.test.fast;
+package org.eclipse.imp.pdb.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +28,7 @@ import org.eclipse.imp.pdb.facts.type.TypeStore;
 /**
  * @author Arnold Lankamp
  */
-public class TestIO extends TestCase {
+public class TestBinaryIO extends TestCase {
 	private static TypeStore ts = new TypeStore();
 	private static TypeFactory tf = TypeFactory.getInstance();
 	private static IValueFactory vf = ValueFactory.getInstance();
