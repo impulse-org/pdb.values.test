@@ -75,7 +75,7 @@ public class TestBinaryIO extends TestCase {
 				System.out.println(value); // Temp
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				BinaryWriter binaryWriter = new BinaryWriter(value, baos);
+				BinaryWriter binaryWriter = new BinaryWriter(value, baos, ts);
 				binaryWriter.serialize();
 				
 				//PBFWriter.writeValueToFile(value, new File("/tmp/testIO"+i+".pbf")); // Temp
