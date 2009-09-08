@@ -12,14 +12,14 @@
 
 package org.eclipse.imp.pdb.test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IValue;
-import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeDeclarationException;
+import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
 import org.eclipse.imp.pdb.facts.type.Type;
 import org.eclipse.imp.pdb.facts.type.TypeFactory;
@@ -184,9 +184,9 @@ public class TestTypeFactory extends TestCase {
 		// a and b shadow the 'types' field
 		try {
 			IValue[] a = new IValue[] { ff.integer(1), ff.real(1.0),
-					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
+					ff.sourceLocation(new URI("file://bla"), 0, 0, 0, 0, 0, 0) };
 			IValue[] b = new IValue[] { ff.integer(1), ff.real(1.0),
-					ff.sourceLocation(new URL("file://bla"), 0, 0, 0, 0, 0, 0) };
+					ff.sourceLocation(new URI("file://bla"), 0, 0, 0, 0, 0, 0) };
 			Type t = ft.tupleType(a);
 
 			if (t != ft.tupleType(b)) {
@@ -194,7 +194,7 @@ public class TestTypeFactory extends TestCase {
 			}
 
 			testTupleTypeOf(t, 3);
-		} catch (MalformedURLException e) {
+		} catch (URISyntaxException e) {
 			fail(e.toString());
 		}
 	}
