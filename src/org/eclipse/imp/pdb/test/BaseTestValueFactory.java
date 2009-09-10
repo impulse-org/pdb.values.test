@@ -306,14 +306,15 @@ public abstract class BaseTestValueFactory extends TestCase {
 		try {
 			extended = createSomeValues();
 
-
 			StandardTextWriter w = new StandardTextWriter();
 
 			for (IValue o : extended.done()) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				try {
 					w.write(o, out);
-					assertTrue(out.toString().equals(o.toString()));
+					if(!out.toString().equals(o.toString())) {
+						fail(out.toString() + " != " + o.toString());
+					}
 				} catch (IOException e) {
 					fail(e.toString());
 					e.printStackTrace();
@@ -338,7 +339,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 				ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
 				IValue read = r.read(ff, in);
 				if (!o.isEqual(read)) {
-					assertTrue(o.isEqual(read));
+					fail(o + " != " + read);
 				}
 			}
 		} catch (IOException e) {
