@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.imp.pdb.facts.IList;
 import org.eclipse.imp.pdb.facts.IMap;
+import org.eclipse.imp.pdb.facts.IReal;
 import org.eclipse.imp.pdb.facts.IRelation;
 import org.eclipse.imp.pdb.facts.ISet;
 import org.eclipse.imp.pdb.facts.ISetWriter;
@@ -61,6 +62,18 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 	}
 
+	public void testRealZeroDotFromString() {
+		assertTrue(ff.real("0.").isEqual(ff.real("0")));
+	}
+	
+	public void testZeroRealRepresentation() {
+		IReal real = ff.real("0");
+		
+		assertTrue(real.toString().equals("0."));
+	}
+	
+	
+	
 	public void testRelationTupleType() {
 		IRelation r = ff.relation(ft.tupleType(ft.integerType()));
 
