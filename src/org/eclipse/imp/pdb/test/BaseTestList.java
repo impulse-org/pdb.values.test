@@ -83,7 +83,7 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			if (!integerList.append(vf.real(2)).getElementType().isValueType()) {
+			if (!integerList.append(vf.real(2)).getElementType().isNumberType()) {
 			  fail("append should lub the element type");
 			}
 		} catch (FactTypeUseException e) {
@@ -117,7 +117,7 @@ public abstract class BaseTestList extends TestCase {
 		}
 		
 		try {
-			if (!integerList.insert(vf.real(2)).getElementType().isValueType()) {
+			if (!integerList.insert(vf.real(2)).getElementType().isNumberType()) {
 			  fail("insert should lub the element type");
 			}
 		} catch (FactTypeUseException e) {

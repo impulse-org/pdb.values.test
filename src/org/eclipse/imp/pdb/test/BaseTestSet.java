@@ -156,7 +156,7 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.realType());
 		
 		try {
-			if (dSet.intersect(set1).getElementType() != tf.valueType()) {
+			if (dSet.intersect(set1).getElementType() != tf.numberType()) {
 				fail("intersect should produce lub types");
 			}
 		} catch (FactTypeUseException e) {
@@ -292,7 +292,7 @@ public abstract class BaseTestSet extends TestCase {
 		ISet dSet = vf.set(tf.realType());
 		
 		try {
-			if (dSet.union(set1).getElementType() != tf.valueType()) {
+			if (dSet.union(set1).getElementType() != tf.numberType()) {
 				fail("union should produce lub types");
 			}
 		} catch (FactTypeUseException e) {

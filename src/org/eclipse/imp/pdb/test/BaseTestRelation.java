@@ -305,7 +305,7 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 			
 			Type type = intersection.getType();
-			if (!type.getFieldType(0).isValueType()) {
+			if (!type.getFieldType(0).isNumberType()) {
 				fail("intersection should produce lub types");
 			}
 		} catch (FactTypeUseException e) {
@@ -350,7 +350,7 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 			
 			Type type = intersection.getType();
-			if (!type.getFieldType(0).isValueType()) {
+			if (!type.getFieldType(0).isNumberType()) {
 				fail("intersection should produce lub types");
 			}
 		} catch (FactTypeUseException e) {
@@ -470,7 +470,7 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 			
 			Type type = union.getType();
-			if (!type.getFieldType(0).isValueType()) {
+			if (!type.getFieldType(0).isNumberType()) {
 				fail("union should produce lub types");
 			}
 		} catch (FactTypeUseException e) {
@@ -516,7 +516,7 @@ public abstract class BaseTestRelation extends TestCase {
 			}
 			
 			Type type = union.getType();
-			if (!type.getFieldType(0).isValueType()) {
+			if (!type.getFieldType(0).isNumberType()) {
 				fail("union should produce lub types");
 			}
 		} catch (FactTypeUseException e) {
@@ -587,7 +587,7 @@ public abstract class BaseTestRelation extends TestCase {
 			
 			ISet carrier1 = rel1.carrier();
 			
-			if (carrier1.getElementType() != tf.valueType()) {
+			if (carrier1.getElementType() != tf.numberType()) {
 				fail("expected number type on carrier");
 			}
 			

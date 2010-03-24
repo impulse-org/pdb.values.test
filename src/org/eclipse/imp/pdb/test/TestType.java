@@ -43,6 +43,7 @@ public class TestType extends TestCase {
 			basic.add(ft.stringType());
 
 			allTypes.add(ft.valueType());
+			allTypes.add(ft.numberType());
 			allTypes.addAll(basic);
 
 			for (int i = 0; i < 2; i++) {
