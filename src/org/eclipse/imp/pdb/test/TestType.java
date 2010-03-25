@@ -247,6 +247,20 @@ public class TestType extends TestCase {
 				}
 			}
 		}
+		
+		for (Type t1 : allTypes) {
+			if (!t1.isAliasType() && t1.lub(TypeFactory.getInstance().voidType()) != t1) {
+				System.err.println(t1 + " lub void is not " + t1 + "?");
+				fail("void should be bottom");
+			}
+			if (t1.isAliasType() && t1.lub(TypeFactory.getInstance().voidType()) != t1.getAliased()) {
+				fail("void should be bottom");
+			}
+			if (t1.lub(TypeFactory.getInstance().valueType()) != TypeFactory.getInstance().valueType()) {
+				System.err.println(t1 + " lub value is not value?");
+				fail("value should be top");
+			}
+		}
 	}
 
 	public void testGetTypeDescriptor() {
