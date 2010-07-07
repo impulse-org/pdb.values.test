@@ -128,7 +128,7 @@ public class TestType extends TestCase {
 
 		// after instantiation, the parameterized type is an alias for rel[int,
 		// int]
-		Type ComputedInstance = DiGraph.instantiate(ts, bindings); // DiGraph[int]
+		Type ComputedInstance = DiGraph.instantiate(bindings); // DiGraph[int]
 		assertTrue(ComputedInstance.equivalent(IntInstance));
 		assertFalse(ValueInstance.isSubtypeOf(ComputedInstance));
 
@@ -294,7 +294,7 @@ public class TestType extends TestCase {
 			fail("simple match failed");
 		}
 
-		if (!X.instantiate(new TypeStore(), bindings).equals(subject)) {
+		if (!X.instantiate(bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
 
@@ -307,7 +307,7 @@ public class TestType extends TestCase {
 			fail("relation match failed");
 		}
 
-		if (!relXX.instantiate(new TypeStore(), bindings).equals(subject)) {
+		if (!relXX.instantiate(bindings).equals(subject)) {
 			fail("instantiate failed");
 		}
 
@@ -320,7 +320,7 @@ public class TestType extends TestCase {
 			fail("lubbing during matching failed");
 		}
 
-		if (!relXX.instantiate(new TypeStore(), bindings).equals(ft.relType(lub, lub))) {
+		if (!relXX.instantiate(bindings).equals(ft.relType(lub, lub))) {
 			fail("instantiate failed");
 		}
 
