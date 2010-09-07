@@ -22,6 +22,7 @@ import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
+import org.eclipse.imp.pdb.facts.io.StandardTextReader;
 import org.eclipse.imp.pdb.facts.io.XMLReader;
 import org.eclipse.imp.pdb.facts.io.XMLWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
@@ -115,6 +116,19 @@ public class TestIO extends TestCase {
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();
+		}
+	}
+	
+	public void testStandardReader() {
+		StandardTextReader reader = new StandardTextReader();
+		
+		try {
+			IValue v = reader.read(vf, new ByteArrayInputStream("f (\"a b c\")".getBytes()));
+			assertEquals(v, tf.nodeType().make(vf, "f", tf.stringType().make(vf, "a b c")));
+		} catch (FactTypeUseException e) {
+			fail(e.getMessage());
+		} catch (IOException e) {
+			fail(e.getMessage());
 		}
 	}
 
