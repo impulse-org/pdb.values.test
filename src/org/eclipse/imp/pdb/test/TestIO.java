@@ -125,6 +125,11 @@ public class TestIO extends TestCase {
 		try {
 			IValue v = reader.read(vf, new ByteArrayInputStream("f (\"a b c\")".getBytes()));
 			assertEquals(v, tf.nodeType().make(vf, "f", tf.stringType().make(vf, "a b c")));
+			
+			IValue r = reader.read(vf, new ByteArrayInputStream("[1.7976931348623157E+308]".getBytes()));
+			System.err.println(r);
+			assertEquals(r, vf.list(vf.real("1.7976931348623157E+308")));
+			
 		} catch (FactTypeUseException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
