@@ -2,6 +2,7 @@ package org.eclipse.imp.pdb.test;
 
 import junit.framework.TestCase;
 
+import org.eclipse.imp.pdb.facts.IInteger;
 import org.eclipse.imp.pdb.facts.INumber;
 import org.eclipse.imp.pdb.facts.IReal;
 import org.eclipse.imp.pdb.facts.IValue;
@@ -19,7 +20,7 @@ abstract public class BaseTestBasicValues extends TestCase {
 	}
 	
 	protected void assertEqual(IValue l, IValue r) {
-		assertTrue(l.isEqual(r));
+		assertTrue("Expected " + l + " got " + r, l.isEqual(r));
 	}
 	
 	public void testIntAddition() {
@@ -39,15 +40,25 @@ abstract public class BaseTestBasicValues extends TestCase {
 		assertTrue(tf.numberType().make(vf, 1.0).isEqual(vf.real(1.0)));
 	}
 
+	public void testNumberMakeRational() {
+		assertTrue(tf.numberType().make(vf, 1, 2).isEqual(vf.rational(1, 2)));
+	}
+	
 	public void testNumberSubTypes() {
 		assertTrue(tf.integerType().isSubtypeOf(tf.numberType()));
 		assertFalse(tf.numberType().isSubtypeOf(tf.integerType()));
 		assertTrue(tf.realType().isSubtypeOf(tf.numberType()));
 		assertFalse(tf.numberType().isSubtypeOf(tf.realType()));
+		assertTrue(tf.rationalType().isSubtypeOf(tf.numberType()));
+		assertFalse(tf.numberType().isSubtypeOf(tf.rationalType()));
 		
 		assertTrue(tf.integerType().lub(tf.realType()).equivalent(tf.numberType()));
+		assertTrue(tf.integerType().lub(tf.rationalType()).equivalent(tf.numberType()));
 		assertTrue(tf.integerType().lub(tf.numberType()).equivalent(tf.numberType()));
 		assertTrue(tf.realType().lub(tf.numberType()).equivalent(tf.numberType()));
+		assertTrue(tf.rationalType().lub(tf.integerType()).equivalent(tf.numberType()));
+		assertTrue(tf.rationalType().lub(tf.realType()).equivalent(tf.numberType()));
+		assertTrue(tf.rationalType().lub(tf.numberType()).equivalent(tf.numberType()));
 	}
 	
 	public void testNumberArithmatic() {
@@ -55,19 +66,30 @@ abstract public class BaseTestBasicValues extends TestCase {
 		INumber i2 = (INumber) tf.numberType().make(vf, 2);
 		INumber r1 = (INumber) tf.numberType().make(vf, 1.0);
 		INumber r2 = (INumber) tf.numberType().make(vf, 2.0);
+		INumber q1 = (INumber) tf.numberType().make(vf, 1, 1);
+		INumber q2 = (INumber) tf.numberType().make(vf, 2, 1);
 		
 		assertEqual(i1.add(i2),vf.integer(3));
 		assertEqual(i1.add(r2),vf.real(3));
+		assertEqual(i1.add(q2),vf.rational(3, 1));
+		assertEqual(q1.add(i2),vf.rational(3, 1));
+		assertEqual(q1.add(q2),vf.rational(3, 1));
 		assertEqual(r1.add(r2),vf.real(3));
 		assertEqual(r1.add(i2),vf.real(3));
+		assertEqual(r1.add(q2),vf.real(3));
 		
 		assertEqual(i1.subtract(i2),vf.integer(-1));
 		assertEqual(i1.subtract(r2),vf.real(-1));
 		assertEqual(r1.subtract(r2),vf.real(-1));
 		assertEqual(r1.subtract(i2),vf.real(-1));
+		assertEqual(q1.subtract(q2),vf.rational(-1,1));
+		assertEqual(q1.subtract(r2),vf.real(-1));
+		assertEqual(q1.subtract(i2),vf.rational(-1,1));
+		assertEqual(r1.subtract(q2),vf.real(-1));
 		
-		INumber i5 =  (INumber) tf.numberType().make(vf, 5);
+		IInteger i5 =  (IInteger) tf.numberType().make(vf, 5);
 		assertEqual(i5.divide(i2, 80*80),vf.real(2.5));
+		assertEqual(i5.divide(i2.toRational()),vf.rational(5, 2));
 	}
 	
 	
