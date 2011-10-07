@@ -41,6 +41,7 @@ public class TestType extends TestCase {
 			basic.add(ft.realType());
 			basic.add(ft.sourceLocationType());
 			basic.add(ft.stringType());
+			basic.add(ft.nodeType());
 
 			allTypes.add(ft.valueType());
 			allTypes.add(ft.numberType());
@@ -68,16 +69,23 @@ public class TestType extends TestCase {
 			newTypes.add(ft.setType(t1));
 			newTypes.add(ft.aliasType(ts, "type_" + allTypes.size()
 					+ newTypes.size(), t1));
+			Type adt = ft.abstractDataType(ts, "adt_" + newTypes.size());
+			newTypes.add(ft.constructor(ts, adt, "cons_" + newTypes.size()));
+			newTypes.add(adt);
+			
 			int max2 = COMBINATION_UPPERBOUND;
 
 			for (Type t2 : allTypes) {
 				newTypes.add(ft.tupleType(t1, t2));
 				newTypes.add(ft.relType(t1, t2));
+				newTypes.add(ft.constructor(ts, adt, "cons_" + newTypes.size(), t1, "a" + newTypes.size(), t2, "b" + newTypes.size()));
 				int max3 = COMBINATION_UPPERBOUND;
 
 				for (Type t3 : allTypes) {
 					newTypes.add(ft.tupleType(t1, t2, t3));
 					newTypes.add(ft.relType(t1, t2, t3));
+					newTypes.add(ft.constructor(ts, adt, "cons_" + newTypes.size(), t1, "a" + newTypes.size(), t2, "b"+ newTypes.size(), t3, "c" + newTypes.size()));
+					
 					if (max3-- == 0) {
 						break;
 					}
@@ -152,10 +160,19 @@ public class TestType extends TestCase {
 				E.isSubtypeOf(ft.nodeType()));
 
 		assertTrue(E.isSubtypeOf(ft.valueType()));
-
+		assertTrue(E.isSubtypeOf(ft.nodeType()));
+		assertTrue(E.lub(ft.nodeType()).isNodeType());
+		assertTrue(ft.nodeType().lub(E).isNodeType());
+		
 		Type f = ft.constructor(ts, E, "f", ft.integerType(), "i");
 		Type g = ft.constructor(ts, E, "g", ft.integerType(), "j");
 
+		assertTrue(f.isSubtypeOf(ft.nodeType()));
+		
+		assertTrue(f.lub(ft.nodeType()).isNodeType());
+		assertTrue(ft.nodeType().lub(f).isNodeType());
+		
+		
 		Type a = ft.aliasType(ts, "a", ft.integerType());
 
 		assertFalse(f.isSubtypeOf(ft.integerType())
@@ -250,15 +267,15 @@ public class TestType extends TestCase {
 		
 		for (Type t1 : allTypes) {
 			if (!t1.isAliasType() && t1.lub(TypeFactory.getInstance().voidType()) != t1) {
-				System.err.println(t1 + " lub void is not " + t1 + "?");
-				fail("void should be bottom");
+				System.err.println(t1 + " lub void is not " + t1 + "? its "+ t1.lub(TypeFactory.getInstance().voidType()));
+				fail("void should be bottom: " + t1 + ".lub = " + t1.lub(TypeFactory.getInstance().voidType()));
 			}
 			if (t1.isAliasType() && t1.lub(TypeFactory.getInstance().voidType()) != t1.getAliased()) {
-				fail("void should be bottom");
+				fail("void should be bottom:" + t1);
 			}
 			if (t1.lub(TypeFactory.getInstance().valueType()) != TypeFactory.getInstance().valueType()) {
 				System.err.println(t1 + " lub value is not value?");
-				fail("value should be top");
+				fail("value should be top:" + t1);
 			}
 		}
 	}
