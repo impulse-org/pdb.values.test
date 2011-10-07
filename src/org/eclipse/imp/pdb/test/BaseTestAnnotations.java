@@ -153,4 +153,21 @@ public abstract class BaseTestAnnotations extends TestCase {
 		assertTrue(vf.list(n).isEqual(vf.list(na)));
 		assertTrue(vf.set(vf.set(n)).isEqual(vf.set(vf.set(na))));
 	}
+	
+	public void testNodeAnnotation() {
+		ts.declareAnnotation(tf.nodeType(), "foo", tf.boolType());
+		INode n = vf.node("hello");
+		INode na = n.setAnnotation("foo", vf.bool(true));
+		
+		assertTrue(na.getAnnotation("foo").getType().isBoolType());
+		
+		// annotations on node type should be propagated
+		assertTrue(ts.getAnnotationType(tf.nodeType(), "foo").isBoolType());
+		assertTrue(ts.getAnnotations(E).containsKey("foo"));
+		
+		// annotations sets should not collapse into one big set
+		ts.declareAnnotation(E, "a", tf.integerType());
+		ts.declareAnnotation(N, "b", tf.boolType());
+		assertTrue(!ts.getAnnotations(E).equals(ts.getAnnotations(N)));
+	}
 }
