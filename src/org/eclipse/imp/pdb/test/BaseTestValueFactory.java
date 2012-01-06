@@ -28,7 +28,6 @@ import org.eclipse.imp.pdb.facts.ISetWriter;
 import org.eclipse.imp.pdb.facts.ITuple;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.exceptions.FactParseError;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.io.StandardTextReader;
 import org.eclipse.imp.pdb.facts.io.StandardTextWriter;
@@ -291,6 +290,8 @@ public abstract class BaseTestValueFactory extends TestCase {
 
 	public void testString() {
 		assertTrue(ff.string("hello").getValue().equals("hello"));
+		assertTrue(ff.string(0x1F35D).getValue().equals("🍝"));
+		assertTrue(ff.string(new int[] {0x1F35D,0x1F35D}).getValue().equals("🍝🍝"));
 	}
 
 //	public void testSourceLocation() {

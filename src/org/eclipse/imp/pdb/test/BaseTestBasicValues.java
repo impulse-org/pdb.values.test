@@ -22,6 +22,50 @@ abstract public class BaseTestBasicValues extends TestCase {
 	protected void assertEqual(IValue l, IValue r) {
 		assertTrue("Expected " + l + " got " + r, l.isEqual(r));
 	}
+
+	public void testStringRepresentation() {
+		assertTrue(vf.string("\uD83C\uDF5D").isEqual(vf.string("🍝")));
+		assertTrue(vf.string(new String(Character.toChars(0x1F35D))).isEqual(vf.string("🍝")));
+	}
+	
+	public void testStringLength() {
+		assertTrue(vf.string("\uD83C\uDF5D").length() == 1);
+		assertTrue(vf.string("\uD83C\uDF5D\uD83C\uDF5D").length() == 2);
+		assertTrue(vf.string("🍝").length() == 1);
+		assertTrue(vf.string("🍝🍝").length() == 2);
+		assertTrue(vf.string("é").length() == 1);
+		assertTrue(vf.string("").length() == 0);
+	}
+	
+	public void testStringReverse() {
+		assertTrue(vf.string("").reverse().isEqual(vf.string("")));
+		assertTrue(vf.string("🍝").reverse().isEqual(vf.string("🍝")));
+		assertTrue(vf.string("🍝🍝").reverse().isEqual(vf.string("🍝🍝")));
+		assertTrue(vf.string("🍝x🍝").reverse().isEqual(vf.string("🍝x🍝")));
+	}
+	
+	public void testStringSubString() {
+		assertTrue(vf.string("").substring(0,0).isEqual(vf.string("")));
+		assertTrue(vf.string("🍝").substring(0,1).isEqual(vf.string("🍝")));
+		assertTrue(vf.string("🍝🍝").substring(0,1).isEqual(vf.string("🍝")));
+		assertTrue(vf.string("🍝x🍝").substring(1,2).isEqual(vf.string("x")));
+		assertTrue(vf.string("🍝x🍝").substring(1,3).isEqual(vf.string("x🍝")));
+	}
+	
+	public void testStringCharAt() {
+		assertTrue(vf.string("🍝").charAt(0) == 0x1F35D);
+		assertTrue(vf.string("🍝🍞").charAt(1) == 0x1F35E);
+		assertTrue(vf.string("🍝x🍝").charAt(1) == 'x');
+		assertTrue(vf.string("🍝x🍞").charAt(2) == 0x1F35E);
+	}
+	
+	public void testStringConcat() {
+		assertTrue(vf.string("").concat(vf.string("")).isEqual(vf.string("")));
+		assertTrue(vf.string("x").concat(vf.string("y")).isEqual(vf.string("xy")));
+		assertTrue(vf.string("🍝").concat(vf.string("y")).isEqual(vf.string("🍝y")));
+		assertTrue(vf.string("x").concat(vf.string("🍝")).isEqual(vf.string("x🍝")));
+		assertTrue(vf.string("🍝").concat(vf.string("🍝")).isEqual(vf.string("🍝🍝")));
+	}
 	
 	public void testIntAddition() {
 		assertTrue(vf.integer(1).add(vf.integer(1)).isEqual(vf.integer(2)));
