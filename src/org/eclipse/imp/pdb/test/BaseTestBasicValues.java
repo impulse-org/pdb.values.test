@@ -42,6 +42,7 @@ abstract public class BaseTestBasicValues extends TestCase {
 		assertTrue(vf.string("🍝").reverse().isEqual(vf.string("🍝")));
 		assertTrue(vf.string("🍝🍝").reverse().isEqual(vf.string("🍝🍝")));
 		assertTrue(vf.string("🍝x🍝").reverse().isEqual(vf.string("🍝x🍝")));
+		assertTrue(vf.string("🍝🍞").reverse().getValue().equals("🍞🍝"));
 	}
 	
 	public void testStringSubString() {
