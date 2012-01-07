@@ -12,9 +12,9 @@
 
 package org.eclipse.imp.pdb.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import junit.framework.TestCase;
 
@@ -73,7 +73,7 @@ public class TestIO extends TestCase {
 		int i = 0;
 		for (IValue test : testValues) {
 			try {
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				StringWriter stream = new StringWriter();
 				testWriter.write(test, stream);
 				System.err.println(test + " -> " + stream.toString());
 				
@@ -103,7 +103,7 @@ public class TestIO extends TestCase {
 		
 		try {
 			for (int i = 0; i < testXML.length; i++) {
-				IValue result = testReader.read(vf, ts, Boolean, new ByteArrayInputStream(testXML[i].getBytes()));
+				IValue result = testReader.read(vf, ts, Boolean, new StringReader(testXML[i]));
 				System.err.println(testXML[i] + " -> " + result);
 				
 				if (!result.isEqual(testValues[i])) {
@@ -123,10 +123,10 @@ public class TestIO extends TestCase {
 		StandardTextReader reader = new StandardTextReader();
 		
 		try {
-			IValue v = reader.read(vf, new ByteArrayInputStream("f (\"a b c\")".getBytes()));
+			IValue v = reader.read(vf, new StringReader("f (\"a b c\")"));
 			assertEquals(v, tf.nodeType().make(vf, "f", tf.stringType().make(vf, "a b c")));
 			
-			IValue r = reader.read(vf, new ByteArrayInputStream("[1.7976931348623157E+308]".getBytes()));
+			IValue r = reader.read(vf, new StringReader("[1.7976931348623157E+308]"));
 			System.err.println(r);
 			assertEquals(r, vf.list(vf.real("1.7976931348623157E+308")));
 			

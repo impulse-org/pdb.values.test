@@ -13,6 +13,8 @@ package org.eclipse.imp.pdb.test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,10 +30,12 @@ import org.eclipse.imp.pdb.facts.IRational;
 import org.eclipse.imp.pdb.facts.IReal;
 import org.eclipse.imp.pdb.facts.IValue;
 import org.eclipse.imp.pdb.facts.IValueFactory;
-import org.eclipse.imp.pdb.facts.io.IValueReader;
-import org.eclipse.imp.pdb.facts.io.IValueWriter;
-import org.eclipse.imp.pdb.facts.io.PBFReader;
-import org.eclipse.imp.pdb.facts.io.PBFWriter;
+import org.eclipse.imp.pdb.facts.io.IValueBinaryReader;
+import org.eclipse.imp.pdb.facts.io.IValueBinaryWriter;
+import org.eclipse.imp.pdb.facts.io.IValueTextReader;
+import org.eclipse.imp.pdb.facts.io.IValueTextWriter;
+import org.eclipse.imp.pdb.facts.io.BinaryValueReader;
+import org.eclipse.imp.pdb.facts.io.BinaryValueWriter;
 import org.eclipse.imp.pdb.facts.io.StandardTextReader;
 import org.eclipse.imp.pdb.facts.io.StandardTextWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
@@ -145,25 +149,45 @@ abstract public class BaseTestRandomValues extends TestCase {
 		if(noisy)
 			System.out.println("Test I/O: " + "(" + getClass().getPackage().getName() + ")");
 
-		ioHelper1("PBF", new PBFReader(), new PBFWriter());
-		ioHelper1("Text", new StandardTextReader(), new StandardTextWriter());
+		ioHelperBin("PBF", new BinaryValueReader(), new BinaryValueWriter());
+		ioHelperText("Text", new StandardTextReader(), new StandardTextWriter());
 	}
 
-	private void ioHelper1(String io, IValueReader reader, IValueWriter writer) throws IOException {
+	private void ioHelperText(String io, IValueTextReader reader, IValueTextWriter writer) throws IOException {
 		// TODO: integer I/O is broken in the reference implementation
 		if(!getClass().getPackage().getName().equals("org.eclipse.imp.pdb.test.reference"))
-			ioHelper2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
-		ioHelper2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
-			ioHelper2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
+			ioHelperText2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
+		ioHelperText2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
+			ioHelperText2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
+	}
+	
+	private void ioHelperBin(String io, IValueBinaryReader reader, IValueBinaryWriter writer) throws IOException {
+		// TODO: integer I/O is broken in the reference implementation
+		if(!getClass().getPackage().getName().equals("org.eclipse.imp.pdb.test.reference"))
+			ioHelperBin2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
+		ioHelperBin2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
+			ioHelperBin2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
 	}
 	
 	
-	private void ioHelper2(String typeName, IValueReader reader, IValueWriter writer, DataGenerator g) throws IOException {
+	private void ioHelperText2(String typeName, IValueTextReader reader, IValueTextWriter writer, DataGenerator g) throws IOException {
 		if(noisy)
 			System.out.printf("  %-16s ", typeName + ":");
 		int count = 0;
 		for(INumber n : g.generate(INumber.class, N*10)) {
-			ioHelper3(reader, writer, n);
+			ioHelperText3(reader, writer, n);
+			count++;
+		}
+		if(noisy)
+			System.out.println("" + count + " values");
+	}
+	
+	private void ioHelperBin2(String typeName, IValueBinaryReader reader, IValueBinaryWriter writer, DataGenerator g) throws IOException {
+		if(noisy)
+			System.out.printf("  %-16s ", typeName + ":");
+		int count = 0;
+		for(INumber n : g.generate(INumber.class, N*10)) {
+			ioHelperBin3(reader, writer, n);
 			count++;
 		}
 		if(noisy)
@@ -171,7 +195,17 @@ abstract public class BaseTestRandomValues extends TestCase {
 	}
 
 
-	private void ioHelper3(IValueReader reader, IValueWriter writer, INumber n)
+	private void ioHelperText3(IValueTextReader reader, IValueTextWriter writer, INumber n)
+			throws IOException, AssertionFailedError {
+		StringWriter output = new StringWriter();
+		writer.write(n, output);
+		output.close();
+		StringReader input = new StringReader(output.toString());
+		IValue v = reader.read(vf, input);
+		assertEqual(n, v);
+	}
+	
+	private void ioHelperBin3(IValueBinaryReader reader, IValueBinaryWriter writer, INumber n)
 			throws IOException, AssertionFailedError {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		writer.write(n, output);

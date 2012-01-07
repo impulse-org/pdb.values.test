@@ -12,9 +12,9 @@
 
 package org.eclipse.imp.pdb.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 
 import junit.framework.TestCase;
@@ -324,7 +324,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 			StandardTextWriter w = new StandardTextWriter();
 
 			for (IValue o : extended.done()) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				StringWriter out = new StringWriter();
 				try {
 					w.write(o, out);
 					if(!out.toString().equals(o.toString())) {
@@ -349,9 +349,9 @@ public abstract class BaseTestValueFactory extends TestCase {
 		
 		try {
 			for (IValue o : createSomeValues().done()) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				StringWriter out = new StringWriter();
 				w.write(o, out);
-				ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+				StringReader in = new StringReader(out.toString());
 				IValue read = r.read(ff, in);
 				if (!o.isEqual(read)) {
 					fail(o + " != " + read);
