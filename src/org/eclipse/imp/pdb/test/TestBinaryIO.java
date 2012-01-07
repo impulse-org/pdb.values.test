@@ -57,6 +57,7 @@ public class TestBinaryIO extends TestCase {
 			vf.integer(0),
 			vf.integer(1),
 			vf.integer(-1),
+			vf.string("🍝"),
 			vf.integer(Integer.MAX_VALUE),
 			vf.integer(Integer.MIN_VALUE),
 			vf.integer(new byte[]{(byte)0xfe, (byte)0xdc, (byte)0xba, (byte)0x98, (byte)0x76, (byte)0x54}),
