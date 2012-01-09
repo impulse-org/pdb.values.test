@@ -154,19 +154,15 @@ abstract public class BaseTestRandomValues extends TestCase {
 	}
 
 	private void ioHelperText(String io, IValueTextReader reader, IValueTextWriter writer) throws IOException {
-		// TODO: integer I/O is broken in the reference implementation
-		if(!getClass().getPackage().getName().equals("org.eclipse.imp.pdb.test.reference"))
-			ioHelperText2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
-		ioHelperText2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
-			ioHelperText2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
+	  ioHelperText2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
+	  ioHelperText2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
+	  ioHelperText2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
 	}
 	
 	private void ioHelperBin(String io, IValueBinaryReader reader, IValueBinaryWriter writer) throws IOException {
-		// TODO: integer I/O is broken in the reference implementation
-		if(!getClass().getPackage().getName().equals("org.eclipse.imp.pdb.test.reference"))
-			ioHelperBin2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
-		ioHelperBin2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
-			ioHelperBin2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
+	  ioHelperBin2(io + " Integers", reader, writer, new DataGenerator(generator, INumber.class, intTestSet, new RandomIntegerGenerator(vf)));
+	  ioHelperBin2(io + " Rationals", reader, writer, new DataGenerator(generator, INumber.class, ratTestSet, new RandomRationalGenerator(vf)));
+	  ioHelperBin2(io + " Reals", reader, writer, new DataGenerator(generator, INumber.class, realTestSet, new RandomRealGenerator(vf)));
 	}
 	
 	
