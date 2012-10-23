@@ -130,6 +130,15 @@ public class TestIO extends TestCase {
 			System.err.println(r);
 			assertEquals(r, vf.list(vf.real("1.7976931348623157E+308")));
 			
+			
+			IValue m = reader.read(vf, new StringReader("()"));
+			System.err.println(m);
+			assertEquals(m, vf.mapWriter().done());
+			
+			IValue t = reader.read(vf, new StringReader("<()>"));
+			System.err.println(t);
+			assertEquals(t, vf.tuple(vf.mapWriter().done()));
+			
 		} catch (FactTypeUseException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {
