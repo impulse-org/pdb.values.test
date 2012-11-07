@@ -63,7 +63,7 @@ public abstract class BaseTestEquality extends TestCase {
 		assertFalse(vf.set(vf.integer(1)).isEqual(vf.set(vf.integer(0))));
 		
 		assertTrue(vf.set(vf.set(tf.voidType())).isEqual(vf.set(vf.set(tf.integerType()))));
-		assertFalse(vf.set(vf.set(tf.realType())).isEqual(vf.set(vf.set(tf.integerType()))));
+		assertTrue(vf.set(vf.set(tf.realType())).isEqual(vf.set(vf.set(tf.integerType()))));
 	}
 	
 }
