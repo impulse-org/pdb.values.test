@@ -235,7 +235,7 @@ public abstract class BaseTestValueFactory extends TestCase {
 		}
 
 		if (l.getElementType() != ft.realType()) {
-			fail("should be a list of doubles");
+			fail("should be a list of reals");
 		}
 	}
 
