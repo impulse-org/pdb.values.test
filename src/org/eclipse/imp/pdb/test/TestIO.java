@@ -23,6 +23,7 @@ import org.eclipse.imp.pdb.facts.IValueFactory;
 import org.eclipse.imp.pdb.facts.exceptions.FactTypeUseException;
 import org.eclipse.imp.pdb.facts.impl.reference.ValueFactory;
 import org.eclipse.imp.pdb.facts.io.StandardTextReader;
+import org.eclipse.imp.pdb.facts.io.StandardTextWriter;
 import org.eclipse.imp.pdb.facts.io.XMLReader;
 import org.eclipse.imp.pdb.facts.io.XMLWriter;
 import org.eclipse.imp.pdb.facts.type.Type;
@@ -138,6 +139,12 @@ public class TestIO extends TestCase {
 			IValue t = reader.read(vf, new StringReader("<()>"));
 			System.err.println(t);
 			assertEquals(t, vf.tuple(vf.mapWriter().done()));
+			
+			StringWriter w = new StringWriter();
+			new StandardTextWriter().write(vf.tuple(), w);
+			IValue u = reader.read(vf, new StringReader(w.toString()));
+      System.err.println(u);
+      assertEquals(u, vf.tuple());
 			
 		} catch (FactTypeUseException e) {
 			fail(e.getMessage());
