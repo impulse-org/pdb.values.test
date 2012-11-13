@@ -200,6 +200,14 @@ public class TestType extends TestCase {
 		}
 	}
 	
+	public void testVoidProblem1() {
+	  assertFalse(ft.listType(ft.voidType()).isSubtypeOf(ft.voidType()));
+	  assertFalse(ft.setType(ft.voidType()).isSubtypeOf(ft.voidType()));
+	  assertFalse(ft.relType(ft.voidType()).isSubtypeOf(ft.voidType()));
+	  assertFalse(ft.tupleType(ft.voidType()).isSubtypeOf(ft.voidType()));
+	  assertFalse(ft.mapType(ft.voidType(),ft.voidType()).isSubtypeOf(ft.voidType()));
+	}
+	
 	public void testIsSubtypeOf() {
 		for (Type t : allTypes) {
 			if (!t.isSubtypeOf(t)) {
